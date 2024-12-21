@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/21 15:24:13 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/21 19:35:26 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,16 @@
  * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
 
+struct s_philosopher{
+
+}	t_philosopher;
+
 int	main(int argc, char *argv[])
 {
+	struct timeval	epoch;
+
+	printf("%d\n",gettimeofday(&epoch, NULL));
+	printf("tv_sec: %ld\ntv_usec: %ld\n", epoch.tv_sec, epoch.tv_usec);
+
 	return (EXIT_SUCCESS);
 }
