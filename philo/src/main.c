@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 10:36:46 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/23 12:49:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,22 @@
 */
 
 struct s_philosopher{
-
+	pthread_mutex_t		mutex;
+	struct s_philosopher *next;
 }	t_philosopher;
 
 int	main(int argc, char *argv[])
 {
+	int	i;
 	if (parse_arguments(argc, argv))
 	{
 		write(2, "Usage: ./philo [no_philo] [time_die] ", 37);
 		write(2, "[time_eat] [time_sleep] (must_eat)\n", 36);
 		return (EXIT_FAILURE);
 	}
+	// Create one struct for every philosopher
+	// Each struct should have a mutex and a pointer to the next philosopher
+	// The last node of the linked list should point to the first (circular linked list)
+
 	return (EXIT_SUCCESS);
 }
