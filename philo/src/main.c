@@ -6,11 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 12:49:08 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/23 13:58:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static	t_args	*allocate_args(int argc, char *argv[]);
 
 /* SUBJECT
  * 1. Each philosopher should be a thread.
@@ -28,15 +30,12 @@
  * The program should be executed as per the following:
  * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
-
-struct s_philosopher{
-	pthread_mutex_t		mutex;
-	struct s_philosopher *next;
-}	t_philosopher;
-
 int	main(int argc, char *argv[])
 {
-	int	i;
+//	int				i;
+//	t_philosopher	*header;
+	t_args			*args;
+
 	if (parse_arguments(argc, argv))
 	{
 		write(2, "Usage: ./philo [no_philo] [time_die] ", 37);
@@ -46,6 +45,26 @@ int	main(int argc, char *argv[])
 	// Create one struct for every philosopher
 	// Each struct should have a mutex and a pointer to the next philosopher
 	// The last node of the linked list should point to the first (circular linked list)
-
+	args = allocate_args(argc, argv);
+//	header = allocate_philosophers(args);
+	free(args);
 	return (EXIT_SUCCESS);
+}
+
+static	t_args	*allocate_args(int argc, char *argv[])
+{
+	t_args	*output;
+
+	output = (t_args *)malloc(sizeof(t_args));
+	if (!output)
+		exit(EXIT_FAILURE);
+	output->no_philo = ft_u_atoi(argv[1]);
+	output->time_to_die = ft_u_atoi(argv[2]);
+	output->time_to_eat = ft_u_atoi(argv[3]);
+	output->time_to_sleep = ft_u_atoi(argv[4]);
+	if (argc == 6)
+		output->total_no_meals = (ft_u_atoi(argv[5]));
+	else
+		output->total_no_meals = -1;
+	return (output);
 }
