@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/21 19:35:26 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/23 09:52:21 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ struct s_philosopher{
 
 }	t_philosopher;
 
+typedef struct timeval t_timeval;
+
 int	main(int argc, char *argv[])
 {
-	struct timeval	epoch;
-
-	printf("%d\n",gettimeofday(&epoch, NULL));
-	printf("tv_sec: %ld\ntv_usec: %ld\n", epoch.tv_sec, epoch.tv_usec);
+	for (int i = 0; i < 20; i++) {
+		t_timeval	epoch;
+		gettimeofday(&epoch, NULL);
+		printf("tv_sec: %ld - tv_usec: %ld\n", epoch.tv_sec, epoch.tv_usec);
+		usleep(100000);
+	}
 
 	return (EXIT_SUCCESS);
 }
