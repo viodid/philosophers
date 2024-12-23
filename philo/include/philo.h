@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 10:09:59 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/23 10:41:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,7 @@
 #define FALSE 0
 
 typedef struct timeval t_timeval;
+
+u_int8_t	parse_arguments(int argc, char *argv[]);
 
 #endif

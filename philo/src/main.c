@@ -33,33 +33,6 @@ struct s_philosopher{
 
 }	t_philosopher;
 
-static u_int8_t	ft_is_not_num(const char *str)
-{
-	while (*str)
-	{
-		if (*str < 48 || *str > 57)
-			return (EXIT_FAILURE);
-		str++;
-	}
-	return (EXIT_SUCCESS);
-}
-
-u_int8_t	parse_arguments(int argc, char *argv[])
-{
-	int	i;
-
-	if (argc < 5 || argc > 6)
-		return (EXIT_FAILURE);
-	i = 1;
-	while (i < argc)
-	{
-		if (ft_is_not_num(argv[i]))
-			return (EXIT_FAILURE);
-		i++;
-	}
-	return (EXIT_SUCCESS);
-}
-
 int	main(int argc, char *argv[])
 {
 	if (parse_arguments(argc, argv))
