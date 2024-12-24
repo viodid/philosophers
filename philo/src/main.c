@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 18:46:27 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:01:02 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ static t_philosopher	*allocate_philosophers(t_args *args)
 		i++;
 	}
 	philo->next = header;
+	philo->args = args;
 	return (header);
 }
 
