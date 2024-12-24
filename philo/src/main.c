@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 18:04:11 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 18:46:27 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,18 @@ static t_philosopher	*allocate_philosophers(t_args *args)
 	t_philosopher	*philo;
 	uint			i;
 
+	if (args->no_philo == 0)
+		return (NULL);
 	header = (t_philosopher *) malloc(sizeof(t_philosopher));
+	if (!header)
+		exit(EXIT_FAILURE);
 	philo = header;
 	i = 1;
 	while (i < args->no_philo)
 	{
 		philo->next = (t_philosopher *) malloc(sizeof(t_philosopher));
+		if (!philo->next)
+			exit(EXIT_FAILURE);
 		philo->args = args;
 		philo = philo->next;
 		i++;
