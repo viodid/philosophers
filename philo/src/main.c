@@ -6,13 +6,14 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 13:58:08 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 18:04:11 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
 static	t_args	*allocate_args(int argc, char *argv[]);
+static t_philosopher	*allocate_philosophers(t_args *args);
 
 /* SUBJECT
  * 1. Each philosopher should be a thread.
@@ -32,8 +33,7 @@ static	t_args	*allocate_args(int argc, char *argv[]);
 */
 int	main(int argc, char *argv[])
 {
-//	int				i;
-//	t_philosopher	*header;
+	t_philosopher	*header;
 	t_args			*args;
 
 	if (parse_arguments(argc, argv))
@@ -42,16 +42,38 @@ int	main(int argc, char *argv[])
 		write(2, "[time_eat] [time_sleep] (must_eat)\n", 36);
 		return (EXIT_FAILURE);
 	}
+	args = allocate_args(argc, argv);
 	// Create one struct for every philosopher
 	// Each struct should have a mutex and a pointer to the next philosopher
 	// The last node of the linked list should point to the first (circular linked list)
-	args = allocate_args(argc, argv);
-//	header = allocate_philosophers(args);
+	header = allocate_philosophers(args);
+	free_philosophers(header);
 	free(args);
+
 	return (EXIT_SUCCESS);
 }
 
-static	t_args	*allocate_args(int argc, char *argv[])
+static t_philosopher	*allocate_philosophers(t_args *args)
+{
+	t_philosopher	*header;
+	t_philosopher	*philo;
+	uint			i;
+
+	header = (t_philosopher *) malloc(sizeof(t_philosopher));
+	philo = header;
+	i = 1;
+	while (i < args->no_philo)
+	{
+		philo->next = (t_philosopher *) malloc(sizeof(t_philosopher));
+		philo->args = args;
+		philo = philo->next;
+		i++;
+	}
+	philo->next = header;
+	return (header);
+}
+
+static t_args	*allocate_args(int argc, char *argv[])
 {
 	t_args	*output;
 

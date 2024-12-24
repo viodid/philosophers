@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 13:54:55 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 18:01:57 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct s_args {
 	uint	time_to_die;
 	uint	time_to_eat;
 	uint	time_to_sleep;
-	uint	total_no_meals;
+	int		total_no_meals;
 }	t_args;
 
 typedef struct s_philosopher {
@@ -41,5 +41,6 @@ typedef struct s_philosopher {
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
+void	free_philosophers(t_philosopher *philo);
 
 #endif
