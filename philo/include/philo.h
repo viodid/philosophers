@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:12:04 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:46:53 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,14 @@ typedef struct s_philosopher {
 	t_args					*args;
 	pthread_mutex_t			mutex;
 	pthread_t				thread;
+	uint					thread_no;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
-void	free_philosophers(t_philosopher *philo);
+void		free_philosophers(t_philosopher *philo);
+void		philosophers(t_philosopher *head);
 
 #endif

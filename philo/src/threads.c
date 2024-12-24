@@ -6,49 +6,63 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:36:50 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:57:51 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-void	*watcher_routine(void *data)
-{
-	t_philosopher	*philo;
+//void	*watcher_routine(void *data)
+//{
+//	t_philosopher	*philo;
+//
+//	philo = (t_philosopher *)data;
+//	return (NULL);
+//}
 
-	philo = (t_philosopher *)data;
-	return (NULL);
-}
-
+// Every odd thread should wait to take the forks inside its thread execution
 void	*philo_routine(void *data)
 {
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
+	if (philo->thread_no % 2 == 1)
+		usleep(5000);
+	printf("thread no: %d\n", philo->thread_no);
 	return (NULL);
 }
 
-static void	create_thread(t_philosopher *philo, uint philo_no)
+void	join_threads(t_philosopher *head)
 {
-	if (philo_no % 2 == 1)
-		usleep(5000);
-	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
+	t_philosopher	*philo;
+
+	philo = head;
+	while (philo->next != head)
+	{
+		pthread_join(philo->thread, NULL);
+		philo = philo->next;
+	}
+	pthread_join(philo->thread, NULL);
 }
 
 void	philosophers(t_philosopher *head)
 {
 	uint			i;
 	t_philosopher	*philo;
-	pthread_t		watcher;
+//	pthread_t		watcher;
 
 	philo = head;
 	i = 0;
+	// Wait some microseconds for every thread to take the forks.
 	while (philo->next != head)
 	{
-		create_thread(philo, i);
+		usleep(10);
+		pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 		philo = philo->next;
 		i++;
 	}
-	create_thread(philo, i);
-	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
+	usleep(10);
+	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
+//	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
+	join_threads(head);
 }

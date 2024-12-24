@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:16:21 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:51:09 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static t_philosopher	*allocate_philosophers(t_args *args);
 */
 int	main(int argc, char *argv[])
 {
-	t_philosopher	*header;
+	t_philosopher	*head;
 	t_args			*args;
 
 	if (parse_arguments(argc, argv))
@@ -43,10 +43,10 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
-	header = allocate_philosophers(args);
-	free_philosophers(header);
+	head = allocate_philosophers(args);
+	philosophers(head);
+	free_philosophers(head);
 	free(args);
-
 	return (EXIT_SUCCESS);
 }
 
@@ -74,11 +74,13 @@ static t_philosopher	*allocate_philosophers(t_args *args)
 		if (!philo->next)
 			exit(EXIT_FAILURE);
 		philo->args = args;
+		philo->thread_no = i - 1;
 		philo = philo->next;
 		i++;
 	}
 	philo->next = header;
 	philo->args = args;
+	philo->thread_no = i - 1;
 	return (header);
 }
 
