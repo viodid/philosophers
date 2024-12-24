@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 18:01:57 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:12:04 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct s_args {
 typedef struct s_philosopher {
 	t_args					*args;
 	pthread_mutex_t			mutex;
+	pthread_t				thread;
 	struct s_philosopher	*next;
 }	t_philosopher;
 

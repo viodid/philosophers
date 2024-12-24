@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:01:02 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 19:16:21 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
-	// Create one struct for every philosopher
-	// Each struct should have a mutex and a pointer to the next philosopher
-	// The last node of the linked list should point to the first (circular linked list)
 	header = allocate_philosophers(args);
 	free_philosophers(header);
 	free(args);
@@ -53,6 +50,11 @@ int	main(int argc, char *argv[])
 	return (EXIT_SUCCESS);
 }
 
+/*
+ * Create one struct for every philosopher
+ * Each struct should have a mutex, the args, and a pointer to the next philosopher
+ * The last node of the linked list should point to the first (circular linked list)
+*/
 static t_philosopher	*allocate_philosophers(t_args *args)
 {
 	t_philosopher	*header;
