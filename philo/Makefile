@@ -4,7 +4,7 @@ INCDIR=./include/
 
 CC=gcc
 # https://www.rapidtables.com/code/linux/gcc/gcc-g.html
-OPT=-g3
+OPT=-g3 -pthread
 CFLAGS=-Wall -Wextra -Werror -I$(INCDIR) $(OPT)
 CFILES=$(shell find $(CODEDIRS) -name '*.c')
 OBJECTS = $(CFILES:.c=.o)

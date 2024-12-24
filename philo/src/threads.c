@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:57:51 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/24 20:12:40 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	*philo_routine(void *data)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
-	if (philo->thread_no % 2 == 1)
+	if (philo->thread_no % 2 == 0)
 		usleep(5000);
 	printf("thread no: %d\n", philo->thread_no);
 	return (NULL);
