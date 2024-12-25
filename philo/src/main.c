@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/25 11:39:39 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/25 11:43:09 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static	t_args	*allocate_args(int argc, char *argv[]);
 static t_philosopher	*allocate_philosophers(t_args *args);
+static void	initialize_mutexes(t_philosopher *head);
 
 /* SUBJECT
  * 1. Each philosopher should be a thread.
@@ -103,3 +104,21 @@ static t_args	*allocate_args(int argc, char *argv[])
 		output->total_no_meals = -1;
 	return (output);
 }
+
+static void	initialize_mutexes(t_philosopher *head)
+{
+	t_philosopher	*philo;
+
+	if (!head)
+		return ;
+	philo = head;
+	while (philo->next != head)
+	{
+		if (pthread_mutex_init(&philo->mutex, NULL))
+			exit(EXIT_FAILURE);
+		philo = philo->next;
+	}
+	if (pthread_mutex_init(&philo->mutex, NULL))
+		exit(EXIT_FAILURE);
+}
+
