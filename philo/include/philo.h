@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 19:46:53 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/25 10:48:16 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ typedef struct s_philosopher {
 	pthread_mutex_t			mutex;
 	pthread_t				thread;
 	uint					thread_no;
+	t_timeval				timestamp;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
