@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/25 11:42:59 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/25 11:58:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 void	*philo_routine(void *data)
 {
 	t_philosopher	*philo;
-	uint			no_meals;
+	int			no_meals;
 
 	philo = (t_philosopher *)data;
 	if (philo->thread_no % 2 == 0)
@@ -37,12 +37,19 @@ void	*philo_routine(void *data)
 	// Unlock mutexes
 	// sleep (usleep)
 	no_meals = 0;
-	while (no_meals < philo->args->total_no_meals)
+	while (no_meals != philo->args->total_no_meals)
 	{
+		pthread_mutex_lock(&philo->mutex);
+		pthread_mutex_lock(&philo->next->mutex);
+		gettimeofday(&philo->timestamp, NULL);
+		printf("thread no: %d - timestamp: %ld - %ld\n", philo->thread_no, philo->timestamp.tv_sec, philo->timestamp.tv_usec);
+		usleep(philo->args->time_to_eat * 1000);
+		pthread_mutex_unlock(&philo->mutex);
+		pthread_mutex_unlock(&philo->next->mutex);
+		no_meals++;
+		usleep(philo->args->time_to_sleep * 1000);
 	}
 
-	gettimeofday(&philo->timestamp, NULL);
-	printf("thread no: %d - timestamp: %ld - %ld\n", philo->thread_no, philo->timestamp.tv_sec, philo->timestamp.tv_usec);
 	return (NULL);
 }
 
