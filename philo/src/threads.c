@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/25 10:53:34 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/25 11:37:51 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,26 @@
 void	*philo_routine(void *data)
 {
 	t_philosopher	*philo;
+	uint			no_meals;
 
 	philo = (t_philosopher *)data;
 	if (philo->thread_no % 2 == 0)
 		usleep(5000);
+
+	// check total number of meals
+	// Lock philo own mutex and next one (eat)
+	// Set timestamp
+	// Eat (usleep)
+	// Unlock mutexes
+	// sleep (usleep)
+	no_meals = 0;
+	while (no_meals < philo->args->total_no_meals)
+	{
+		pthread_mutex_init(&philo->mutex, NULL);
+		pthread_mutex_init(&philo->next->mutex, NULL);
+	}
+
+
 	gettimeofday(&philo->timestamp, NULL);
 	printf("thread no: %d - timestamp: %ld - %ld\n", philo->thread_no, philo->timestamp.tv_sec, philo->timestamp.tv_usec);
 	return (NULL);

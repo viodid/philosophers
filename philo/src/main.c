@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/24 20:12:35 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/25 11:39:39 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ static t_philosopher	*allocate_philosophers(t_args *args);
  * The program should be executed as per the following:
  * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
+
 int	main(int argc, char *argv[])
 {
 	t_philosopher	*head;
@@ -44,6 +45,7 @@ int	main(int argc, char *argv[])
 	}
 	args = allocate_args(argc, argv);
 	head = allocate_philosophers(args);
+	initialize_mutexes(head);
 	philosophers(head);
 	free_philosophers(head);
 	free(args);
