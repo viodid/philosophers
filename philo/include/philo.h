@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 12:56:51 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 13:14:05 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,22 @@ typedef struct s_philosopher {
 	struct s_philosopher	*next;
 }	t_philosopher;
 
+enum e_states {
+	FORK,
+	EAT,
+	SLEEP,
+	THINK,
+	DIED
+};
+
+typedef enum e_states t_states;
+
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
 void		free_philosophers(t_philosopher *philo);
 void		philosophers(t_philosopher *head);
 void		*watcher_routine(void *data);
+void		philo_printer(t_philosopher *philo, t_states state);
 
 #endif
