@@ -6,19 +6,38 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/25 11:58:08 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 09:53:03 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-//void	*watcher_routine(void *data)
-//{
-//	t_philosopher	*philo;
-//
-//	philo = (t_philosopher *)data;
-//	return (NULL);
-//}
+void	*watcher_routine(void *data)
+{
+	t_philosopher	*philo;
+	t_philosopher	*head;
+	t_timeval		curr_time;
+	uint			finished_philos;
+
+
+	philo = (t_philosopher *)data;
+	head = philo;
+	finished_philos = 0;
+	while (finished_philos < head->args->no_philo)
+	{
+		finished_philos = 0;
+		gettimeofday(&curr_time, NULL);
+		while (philo->next != head)
+		{
+			if ((curr_time.tv_usec - philo->timestamp.tv_usec) > (philo->args->time_to_die * 1000))
+			{
+				printf("philo no: %d has died", philo->thread_no);
+				return (NULL);
+			}
+		}
+	}
+	return (NULL);
+}
 
 // Every odd thread should wait to take the forks inside its thread execution
 void	*philo_routine(void *data)
@@ -27,8 +46,11 @@ void	*philo_routine(void *data)
 	int			no_meals;
 
 	philo = (t_philosopher *)data;
+	// Count time without eating since the start of the simulation
+	gettimeofday(&philo->timestamp, NULL);
+	philo->no_meals = 0;
 	if (philo->thread_no % 2 == 0)
-		usleep(5000);
+		usleep(5000); // set to half millisecond in case input arg is 1(500)
 
 	// check total number of meals
 	// Lock philo own mutex and next one (eat)
@@ -36,8 +58,7 @@ void	*philo_routine(void *data)
 	// Eat (usleep)
 	// Unlock mutexes
 	// sleep (usleep)
-	no_meals = 0;
-	while (no_meals != philo->args->total_no_meals)
+	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		pthread_mutex_lock(&philo->mutex);
 		pthread_mutex_lock(&philo->next->mutex);
@@ -46,10 +67,10 @@ void	*philo_routine(void *data)
 		usleep(philo->args->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->mutex);
 		pthread_mutex_unlock(&philo->next->mutex);
-		no_meals++;
+		philo->no_meals++;
 		usleep(philo->args->time_to_sleep * 1000);
 	}
-
+//	pthread_mutex_destroy(&philo->mutex);
 	return (NULL);
 }
 
