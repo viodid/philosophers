@@ -6,13 +6,11 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 12:34:22 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 12:48:19 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
-
-static u_int8_t	check_finished_meal(t_philosopher *philo);
 
 static long	compute_time_ms(t_timeval upper_val, t_timeval lower_val)
 {
@@ -28,7 +26,8 @@ u_int8_t	check_starvation(t_philosopher *philo)
 {
 	t_timeval	curr_time;
 
-	if (check_finished_meal(philo))
+	printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
+	if (philo->no_meals == philo->args->total_no_meals)
 		return (FALSE);
 	gettimeofday(&curr_time, NULL);
 	long op = compute_time_ms(curr_time, philo->timestamp);
@@ -36,16 +35,6 @@ u_int8_t	check_starvation(t_philosopher *philo)
 	if (op > (philo->args->time_to_die * 1000))
 	{
 		printf("philo no: %d has died\n", philo->thread_no);
-		return (TRUE);
-	}
-	return (FALSE);
-}
-
-static u_int8_t	check_finished_meal(t_philosopher *philo)
-{
-	if (philo->no_meals == philo->args->total_no_meals)
-	{
-		printf("philo: %d has finished its meals\n", philo->thread_no);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -81,12 +70,10 @@ void	*watcher_routine(void *data)
 	{
 		while (philo->next != head)
 		{
-			printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
 			if (check_starvation(philo))
 				return (NULL);
 			philo = philo->next;
 		}
-		printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
 		if (check_starvation(philo))
 			return (NULL);
 		philo = philo->next;
