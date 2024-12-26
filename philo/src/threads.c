@@ -6,11 +6,33 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 09:53:03 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 10:42:29 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
+
+static u_int8_t	check_finished_meal(t_philosopher *philo);
+
+u_int8_t	check_starvation(t_philosopher *philo, t_timeval curr_time)
+{
+	if (check_finished_meal(philo))
+		return (FALSE);
+	if ((curr_time.tv_usec - philo->timestamp.tv_usec) > (philo->args->time_to_die * 1000))
+	{
+		printf("philo no: %d has died\n", philo->thread_no);
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+static u_int8_t	check_finished_meal(t_philosopher *philo)
+{
+	printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
+	if (philo->no_meals == philo->args->total_no_meals)
+		return (TRUE);
+	return (FALSE);
+}
 
 void	*watcher_routine(void *data)
 {
@@ -19,22 +41,26 @@ void	*watcher_routine(void *data)
 	t_timeval		curr_time;
 	uint			finished_philos;
 
-
 	philo = (t_philosopher *)data;
 	head = philo;
 	finished_philos = 0;
 	while (finished_philos < head->args->no_philo)
 	{
-		finished_philos = 0;
 		gettimeofday(&curr_time, NULL);
 		while (philo->next != head)
 		{
-			if ((curr_time.tv_usec - philo->timestamp.tv_usec) > (philo->args->time_to_die * 1000))
-			{
-				printf("philo no: %d has died", philo->thread_no);
+			if (check_starvation(philo, curr_time))
 				return (NULL);
-			}
+			if (check_finished_meal(philo))
+				finished_philos++;
+			philo = philo->next;
 		}
+		if (check_starvation(philo, curr_time))
+			return (NULL);
+		if (check_finished_meal(philo))
+			finished_philos++;
+		philo = philo->next;
+		usleep(500);
 	}
 	return (NULL);
 }
@@ -43,7 +69,6 @@ void	*watcher_routine(void *data)
 void	*philo_routine(void *data)
 {
 	t_philosopher	*philo;
-	int			no_meals;
 
 	philo = (t_philosopher *)data;
 	// Count time without eating since the start of the simulation
@@ -91,7 +116,7 @@ void	philosophers(t_philosopher *head)
 {
 	uint			i;
 	t_philosopher	*philo;
-//	pthread_t		watcher;
+	pthread_t		watcher;
 
 	philo = head;
 	i = 0;
@@ -105,6 +130,6 @@ void	philosophers(t_philosopher *head)
 	}
 	usleep(10);
 	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
-//	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
+	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
 	join_threads(head);
 }
