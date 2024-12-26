@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 12:57:59 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 13:23:02 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,16 @@ static void	*philo_routine(void *data)
 	{
 		pthread_mutex_lock(&philo->mutex);
 		pthread_mutex_lock(&philo->next->mutex);
+		state_printer(philo, FORK);
 		gettimeofday(&philo->timestamp, NULL);
+		state_printer(philo, EAT);
 		usleep(philo->args->time_to_eat * 1000);
 		pthread_mutex_unlock(&philo->mutex);
 		pthread_mutex_unlock(&philo->next->mutex);
 		philo->no_meals++;
-		printf("thread no: %d - timestamp: %ld - %ld\n", philo->thread_no, philo->timestamp.tv_sec, philo->timestamp.tv_usec);
+		state_printer(philo, SLEEP);
 		usleep(philo->args->time_to_sleep * 1000); // sleep
+		state_printer(philo, THINK);
 	}
 //	pthread_mutex_destroy(&philo->mutex);
 	return (NULL);

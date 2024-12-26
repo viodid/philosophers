@@ -58,6 +58,6 @@ int			ft_u_atoi(char *str);
 void		free_philosophers(t_philosopher *philo);
 void		philosophers(t_philosopher *head);
 void		*watcher_routine(void *data);
-void		philo_printer(t_philosopher *philo, t_states state);
+void		state_printer(t_philosopher *philo, t_states state);
 
 #endif

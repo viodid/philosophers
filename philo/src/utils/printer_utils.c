@@ -14,7 +14,7 @@
 
 static char	*map_state(t_states state);
 
-void	philo_printer(t_philosopher *philo, t_states state)
+void	state_printer(t_philosopher *philo, t_states state)
 {
 	t_timeval	curr_time;
 	long		sec;

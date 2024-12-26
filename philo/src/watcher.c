@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 12:56:41 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 13:36:43 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*watcher_routine(void *data)
 		if (check_starvation(philo))
 			return (NULL);
 		philo = philo->next;
-		usleep(1000 * 1000);
+		usleep(1000 * 5);
 	}
 	return (NULL);
 }
@@ -62,15 +62,15 @@ static u_int8_t	check_starvation(t_philosopher *philo)
 {
 	t_timeval	curr_time;
 
-	printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
+//	printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
 	if (philo->no_meals == philo->args->total_no_meals)
 		return (FALSE);
 	gettimeofday(&curr_time, NULL);
 	long op = compute_time_ms(curr_time, philo->timestamp);
-	printf("philo no: %d has not eaten since: %ld microseconds\n", philo->thread_no, op);
+//	printf("philo no: %d has not eaten since: %ld microseconds\n", philo->thread_no, op);
 	if (op > (philo->args->time_to_die * 1000))
 	{
-		printf("philo no: %d has died\n", philo->thread_no);
+		state_printer(philo, DIED);
 		return (TRUE);
 	}
 	return (FALSE);
