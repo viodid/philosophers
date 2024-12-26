@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 10:36:19 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 12:56:51 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
 void		free_philosophers(t_philosopher *philo);
 void		philosophers(t_philosopher *head);
+void		*watcher_routine(void *data);
 
 #endif
