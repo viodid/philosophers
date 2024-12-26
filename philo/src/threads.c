@@ -6,13 +6,23 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 11:14:40 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/26 11:48:36 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
 static u_int8_t	check_finished_meal(t_philosopher *philo);
+
+static long	compute_time_ms(t_timeval upper_val, t_timeval lower_val)
+{
+	long	sec;
+	long	micros;
+
+	sec = upper_val.tv_sec - lower_val.tv_sec;
+	micros = upper_val.tv_usec - lower_val.tv_usec;
+	return ((sec * 1000 * 1000) + micros);
+}
 
 u_int8_t	check_starvation(t_philosopher *philo)
 {
@@ -21,7 +31,7 @@ u_int8_t	check_starvation(t_philosopher *philo)
 	if (check_finished_meal(philo))
 		return (FALSE);
 	gettimeofday(&curr_time, NULL);
-	long op = curr_time.tv_usec - philo->timestamp.tv_usec;
+	long op = compute_time_ms(curr_time, philo->timestamp);
 	printf("philo no: %d has not eaten since: %ld microseconds\n", philo->thread_no, op);
 	if ((curr_time.tv_usec - philo->timestamp.tv_usec) > (philo->args->time_to_die * 1000))
 	{
@@ -34,7 +44,10 @@ u_int8_t	check_starvation(t_philosopher *philo)
 static u_int8_t	check_finished_meal(t_philosopher *philo)
 {
 	if (philo->no_meals == philo->args->total_no_meals)
+	{
+		printf("philo: %d has finished its meals\n", philo->thread_no);
 		return (TRUE);
+	}
 	return (FALSE);
 }
 
