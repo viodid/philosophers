@@ -24,6 +24,7 @@
 # define X_BOLD			"\001\033[1;33m\002"
 # define BLU_BOLD		"\001\033[1;34m\002"
 # define Y_BOLD			"\001\033[1;35m\002"
+# define Z_BOLD			"\001\033[1;36m\002"
 # define RES			"\001\033[0m\002"
 
 typedef struct timeval t_timeval;
