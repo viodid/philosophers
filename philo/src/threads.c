@@ -6,14 +6,15 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 13:23:02 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/27 11:09:37 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
 static void	*philo_routine(void *data);
-static void	join_threads(t_philosopher *head);
+//static void	join_threads(t_philosopher *head);
+static void	detach_threads(t_philosopher *head);
 
 void	philosophers(t_philosopher *head)
 {
@@ -34,7 +35,7 @@ void	philosophers(t_philosopher *head)
 	usleep(10);
 	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
-	join_threads(head);
+	detach_threads(head);
 	pthread_join(watcher, NULL);
 }
 
@@ -75,15 +76,28 @@ static void	*philo_routine(void *data)
 	return (NULL);
 }
 
-static void	join_threads(t_philosopher *head)
+static void	detach_threads(t_philosopher *head)
 {
 	t_philosopher	*philo;
 
 	philo = head;
 	while (philo->next != head)
 	{
-		pthread_join(philo->thread, NULL);
+		pthread_detach(philo->thread);
 		philo = philo->next;
 	}
-	pthread_join(philo->thread, NULL);
+	pthread_detach(philo->thread);
 }
+
+//static void	join_threads(t_philosopher *head)
+//{
+//	t_philosopher	*philo;
+//
+//	philo = head;
+//	while (philo->next != head)
+//	{
+//		pthread_join(philo->thread, NULL);
+//		philo = philo->next;
+//	}
+//	pthread_join(philo->thread, NULL);
+//}

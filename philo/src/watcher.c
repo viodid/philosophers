@@ -54,7 +54,7 @@ static uint	check_all_finished_meals(t_philosopher *philo)
 	}
 	if (philo->no_meals == philo->args->total_no_meals)
 		output++;
-	printf("total no of finished meals: %d\n", output);
+//	printf("total no of finished meals: %d\n", output);
 	return (output);
 }
 

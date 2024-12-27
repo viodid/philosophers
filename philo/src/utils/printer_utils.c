@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:01:23 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 13:13:42 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/27 11:31:34 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@ static char	*map_state(t_states state);
 void	state_printer(t_philosopher *philo, t_states state)
 {
 	t_timeval	curr_time;
-	long		sec;
-	long		ms;
+//	static long	seconds_base = 0;
 
 	gettimeofday(&curr_time, NULL);
-	sec = curr_time.tv_sec - philo->timestamp.tv_sec;
-	ms = (curr_time.tv_usec - philo->timestamp.tv_usec) / 1000;
-	printf("%ld:%ld %d %s\n", sec, ms, philo->thread_no, map_state(state));
+//	seconds_base = curr_time.tv_sec - seconds_base;
+	printf("%ld:%ld \t%d %s\n",curr_time.tv_sec ,curr_time.tv_usec, philo->thread_no, map_state(state));
 }
 
 static char	*map_state(t_states state)
