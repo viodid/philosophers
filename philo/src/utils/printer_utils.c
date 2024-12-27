@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:01:23 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/27 12:45:02 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/27 12:48:53 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,6 @@ static char	*map_state(t_states state)
 	else if (state == THINK)
 		return (add_color(Y_BOLD, "is thinking"));
 	else if (state == DIED)
-		return (add_color(Z_BOLD, "died"));
+		return (add_color(RED_BOLD, "died"));
 	return (NULL);
 }

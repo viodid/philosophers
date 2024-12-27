@@ -54,7 +54,6 @@ static uint	check_all_finished_meals(t_philosopher *philo)
 	}
 	if (philo->no_meals == philo->args->total_no_meals)
 		output++;
-//	printf("total no of finished meals: %d\n", output);
 	return (output);
 }
 
@@ -62,12 +61,10 @@ static u_int8_t	check_starvation(t_philosopher *philo)
 {
 	t_timeval	curr_time;
 
-//	printf("philo no: %d has eaten: %d times\n", philo->thread_no, philo->no_meals);
 	if (philo->no_meals == philo->args->total_no_meals)
 		return (FALSE);
 	gettimeofday(&curr_time, NULL);
 	long op = compute_time_ms(curr_time, philo->timestamp);
-//	printf("philo no: %d has not eaten since: %ld microseconds\n", philo->thread_no, op);
 	if (op > (philo->args->time_to_die * 1000))
 	{
 		state_printer(philo, DIED);

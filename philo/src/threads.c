@@ -6,14 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/27 11:09:37 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/27 13:28:42 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
 static void	*philo_routine(void *data);
-//static void	join_threads(t_philosopher *head);
 static void	detach_threads(t_philosopher *head);
 
 void	philosophers(t_philosopher *head)
@@ -24,15 +23,12 @@ void	philosophers(t_philosopher *head)
 
 	philo = head;
 	i = 0;
-	// Wait some microseconds for every thread to take the forks.
 	while (philo->next != head)
 	{
-		usleep(10);
 		pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 		philo = philo->next;
 		i++;
 	}
-	usleep(10);
 	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
 	detach_threads(head);
@@ -45,18 +41,10 @@ static void	*philo_routine(void *data)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
-	// Count time without eating since the start of the simulation
-	gettimeofday(&philo->timestamp, NULL);
 	philo->no_meals = 0;
+	gettimeofday(&philo->timestamp, NULL);
 	if (philo->thread_no % 2 == 0)
-		usleep(5000); // set to half millisecond in case input arg is 1(500)
-
-	// check total number of meals
-	// Lock philo own mutex and next one (eat)
-	// Set timestamp
-	// Eat (usleep)
-	// Unlock mutexes
-	// sleep (usleep)
+		usleep(5000);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		pthread_mutex_lock(&philo->mutex);
@@ -69,10 +57,9 @@ static void	*philo_routine(void *data)
 		pthread_mutex_unlock(&philo->next->mutex);
 		philo->no_meals++;
 		state_printer(philo, SLEEP);
-		usleep(philo->args->time_to_sleep * 1000); // sleep
+		usleep(philo->args->time_to_sleep * 1000);
 		state_printer(philo, THINK);
 	}
-//	pthread_mutex_destroy(&philo->mutex);
 	return (NULL);
 }
 
@@ -88,16 +75,3 @@ static void	detach_threads(t_philosopher *head)
 	}
 	pthread_detach(philo->thread);
 }
-
-//static void	join_threads(t_philosopher *head)
-//{
-//	t_philosopher	*philo;
-//
-//	philo = head;
-//	while (philo->next != head)
-//	{
-//		pthread_join(philo->thread, NULL);
-//		philo = philo->next;
-//	}
-//	pthread_join(philo->thread, NULL);
-//}
