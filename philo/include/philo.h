@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 13:14:05 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/27 11:36:00 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 
 #define TRUE 1
 #define FALSE 0
+# define GRN_BOLD		"\001\033[1;32m\002"
+# define X_BOLD			"\001\033[1;33m\002"
+# define BLU_BOLD		"\001\033[1;34m\002"
+# define Y_BOLD			"\001\033[1;35m\002"
+# define RES			"\001\033[0m\002"
 
 typedef struct timeval t_timeval;
 
