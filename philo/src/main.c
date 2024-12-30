@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/25 11:43:09 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 16:38:32 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	initialize_mutexes(t_philosopher *head);
 
 /* SUBJECT
  * 1. Each philosopher should be a thread.
- * 2. Every philosopher has a fork, i.e. every thread has its own mutex.
+ * 2. Every philosopher has a fork, i.e. every thread has its own m_fork.
  * 3. The program should prevent the philosophers to die.
  * 4. The process will stop whenever a philosopher dies.
  * 5. For a philosopher to avoid dying, should eat.
@@ -55,7 +55,7 @@ int	main(int argc, char *argv[])
 
 /*
  * Create one struct for every philosopher
- * Each struct should have a mutex, the args, and a pointer to the next philosopher
+ * Each struct should have a m_fork, the args, and a pointer to the next philosopher
  * The last node of the linked list should point to the first (circular linked list)
 */
 static t_philosopher	*allocate_philosophers(t_args *args)
@@ -114,11 +114,13 @@ static void	initialize_mutexes(t_philosopher *head)
 	philo = head;
 	while (philo->next != head)
 	{
-		if (pthread_mutex_init(&philo->mutex, NULL))
+		if (pthread_mutex_init(&philo->m_fork, NULL) ||
+				pthread_mutex_init(&philo->m_die, NULL))
 			exit(EXIT_FAILURE);
 		philo = philo->next;
 	}
-	if (pthread_mutex_init(&philo->mutex, NULL))
+	if (pthread_mutex_init(&philo->m_fork, NULL) ||
+		pthread_mutex_init(&philo->m_die, NULL))
 		exit(EXIT_FAILURE);
 }
 

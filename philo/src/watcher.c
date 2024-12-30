@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/26 13:36:43 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 16:45:29 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*watcher_routine(void *data)
 		if (check_starvation(philo))
 			return (NULL);
 		philo = philo->next;
-		usleep(1000 * 5);
+		usleep(1000 * 2);
 	}
 	return (NULL);
 }
@@ -67,12 +67,12 @@ static u_int8_t	check_starvation(t_philosopher *philo)
 	long op = compute_time_ms(curr_time, philo->timestamp);
 	if (op > (philo->args->time_to_die * 1000))
 	{
+		pthread_mutex_lock(&philo->m_die);
 		state_printer(philo, DIED);
 		return (TRUE);
 	}
 	return (FALSE);
 }
-
 
 static long	compute_time_ms(t_timeval upper_val, t_timeval lower_val)
 {

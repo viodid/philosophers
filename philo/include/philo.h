@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/27 12:49:19 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 12:19:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ typedef struct s_args {
 
 typedef struct s_philosopher {
 	t_args					*args;
-	pthread_mutex_t			mutex;
+	pthread_mutex_t			m_fork;
+	pthread_mutex_t			m_die;
 	pthread_t				thread;
 	uint					thread_no;
 	int						no_meals;

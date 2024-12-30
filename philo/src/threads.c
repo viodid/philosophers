@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/27 13:28:42 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 17:56:12 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ void	philosophers(t_philosopher *head)
 	i = 0;
 	while (philo->next != head)
 	{
+		usleep(10);
 		pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 		philo = philo->next;
 		i++;
 	}
+	usleep(10);
 	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
 	detach_threads(head);
@@ -47,14 +49,16 @@ static void	*philo_routine(void *data)
 		usleep(5000);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
-		pthread_mutex_lock(&philo->mutex);
-		pthread_mutex_lock(&philo->next->mutex);
+		pthread_mutex_lock(&philo->m_fork);
+		pthread_mutex_lock(&philo->next->m_fork);
+		pthread_mutex_lock(&philo->m_die);
 		state_printer(philo, FORK);
 		gettimeofday(&philo->timestamp, NULL);
 		state_printer(philo, EAT);
 		usleep(philo->args->time_to_eat * 1000);
-		pthread_mutex_unlock(&philo->mutex);
-		pthread_mutex_unlock(&philo->next->mutex);
+		pthread_mutex_unlock(&philo->m_fork);
+		pthread_mutex_unlock(&philo->next->m_fork);
+		pthread_mutex_unlock(&philo->m_die);
 		philo->no_meals++;
 		state_printer(philo, SLEEP);
 		usleep(philo->args->time_to_sleep * 1000);
