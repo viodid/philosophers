@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 20:10:31 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 20:19:04 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,8 @@ void	*watcher_routine(void *data)
 	t_philosopher	*philo;
 	t_timeval	curr_time;
 	long		op;
-	uint		i;
 
 	philo = (t_philosopher *)data;
-	i = 0;
 	while (TRUE)
 	{
 		if (philo->no_meals == philo->args->total_no_meals)

@@ -61,7 +61,7 @@ typedef enum e_states
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
-void		philosophers(t_philosopher *head);
+void		philosophers(t_args *args);
 void		*watcher_routine(void *data);
 void		state_printer(t_philosopher *philo, t_states state);
 
