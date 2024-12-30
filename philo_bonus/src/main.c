@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 17:59:23 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 19:46:24 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static t_philosopher	*allocate_philosophers(t_args *args);
 static void				initialize_mutexes(t_philosopher *head);
 
 /* SUBJECT
- * 1. Each philosopher should be a thread.
- * 2. Every philosopher has a fork, i.e. every thread has its own m_fork.
+ * 1. Each philosopher should be a process.
+ * 2. There is one fork per philosopher.
  * 3. The program should prevent the philosophers to die.
  * 4. The process will stop whenever a philosopher dies.
  * 5. For a philosopher to avoid dying, should eat.
@@ -33,10 +33,8 @@ static void				initialize_mutexes(t_philosopher *head);
 * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
 
-// TODO: Remove exit() as it is a forbidden function in this assignment
 int	main(int argc, char *argv[])
 {
-	t_philosopher	*head;
 	t_args			*args;
 
 	if (parse_arguments(argc, argv))
@@ -46,47 +44,9 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
-	head = allocate_philosophers(args);
-	initialize_mutexes(head);
-	philosophers(head);
-	free_philosophers(head);
+	philosophers(args);
 	free(args);
 	return (EXIT_SUCCESS);
-}
-
-/*
- * Create one struct for every philosopher.
- * Each struct should have a m_fork, the args, and a pointer
- * to the next philosopher. The last node of the linked list
- * should point to the first (circular linked list)
-*/
-static t_philosopher	*allocate_philosophers(t_args *args)
-{
-	t_philosopher	*header;
-	t_philosopher	*philo;
-	uint			i;
-
-	if (args->no_philo == 0)
-		return (NULL);
-	header = (t_philosopher *) malloc(sizeof(t_philosopher));
-	if (!header)
-		exit(EXIT_FAILURE);
-	philo = header;
-	i = 1;
-	while (i < args->no_philo)
-	{
-		philo->next = (t_philosopher *) malloc(sizeof(t_philosopher));
-		if (!philo->next)
-			exit(EXIT_FAILURE);
-		philo->args = args;
-		philo->thread_no = i;
-		philo = philo->next;
-		i++;
-	}
-	philo->next = header;
-	philo->args = args;
-	philo->thread_no = i;
-	return (header);
 }
 
 static t_args	*allocate_args(int argc, char *argv[])
@@ -105,23 +65,4 @@ static t_args	*allocate_args(int argc, char *argv[])
 	else
 		output->total_no_meals = -1;
 	return (output);
-}
-
-static void	initialize_mutexes(t_philosopher *head)
-{
-	t_philosopher	*philo;
-
-	if (!head)
-		return ;
-	philo = head;
-	while (philo->next != head)
-	{
-		if (pthread_mutex_init(&philo->m_fork, NULL)
-			|| pthread_mutex_init(&philo->m_die, NULL))
-			exit(EXIT_FAILURE);
-		philo = philo->next;
-	}
-	if (pthread_mutex_init(&philo->m_fork, NULL)
-		|| pthread_mutex_init(&philo->m_die, NULL))
-		exit(EXIT_FAILURE);
 }
