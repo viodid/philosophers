@@ -6,15 +6,15 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 16:45:29 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 18:00:15 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static uint	check_all_finished_meals(t_philosopher *philo);
+static uint		check_all_finished_meals(t_philosopher *philo);
 static u_int8_t	check_starvation(t_philosopher *philo);
-static long	compute_time_ms(t_timeval upper_val, t_timeval lower_val);
+static long		compute_time_ms(t_timeval upper_val, t_timeval lower_val);
 
 void	*watcher_routine(void *data)
 {
@@ -60,11 +60,12 @@ static uint	check_all_finished_meals(t_philosopher *philo)
 static u_int8_t	check_starvation(t_philosopher *philo)
 {
 	t_timeval	curr_time;
+	long		op;
 
 	if (philo->no_meals == philo->args->total_no_meals)
 		return (FALSE);
 	gettimeofday(&curr_time, NULL);
-	long op = compute_time_ms(curr_time, philo->timestamp);
+	op = compute_time_ms(curr_time, philo->timestamp);
 	if (op > (philo->args->time_to_die * 1000))
 	{
 		pthread_mutex_lock(&philo->m_die);

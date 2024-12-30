@@ -6,15 +6,15 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 16:38:32 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 17:59:23 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static	t_args	*allocate_args(int argc, char *argv[]);
+static t_args			*allocate_args(int argc, char *argv[]);
 static t_philosopher	*allocate_philosophers(t_args *args);
-static void	initialize_mutexes(t_philosopher *head);
+static void				initialize_mutexes(t_philosopher *head);
 
 /* SUBJECT
  * 1. Each philosopher should be a thread.
@@ -30,7 +30,7 @@ static void	initialize_mutexes(t_philosopher *head);
  *    be greater than the "time_to_die", otherwise he would die of starvation.
  *
  * The program should be executed as per the following:
- * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
+* ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
 
 int	main(int argc, char *argv[])
@@ -54,9 +54,10 @@ int	main(int argc, char *argv[])
 }
 
 /*
- * Create one struct for every philosopher
- * Each struct should have a m_fork, the args, and a pointer to the next philosopher
- * The last node of the linked list should point to the first (circular linked list)
+ * Create one struct for every philosopher.
+ * Each struct should have a m_fork, the args, and a pointer
+ * to the next philosopher. The last node of the linked list
+ * should point to the first (circular linked list)
 */
 static t_philosopher	*allocate_philosophers(t_args *args)
 {
@@ -114,13 +115,12 @@ static void	initialize_mutexes(t_philosopher *head)
 	philo = head;
 	while (philo->next != head)
 	{
-		if (pthread_mutex_init(&philo->m_fork, NULL) ||
-				pthread_mutex_init(&philo->m_die, NULL))
+		if (pthread_mutex_init(&philo->m_fork, NULL)
+			|| pthread_mutex_init(&philo->m_die, NULL))
 			exit(EXIT_FAILURE);
 		philo = philo->next;
 	}
-	if (pthread_mutex_init(&philo->m_fork, NULL) ||
-		pthread_mutex_init(&philo->m_die, NULL))
+	if (pthread_mutex_init(&philo->m_fork, NULL)
+		|| pthread_mutex_init(&philo->m_die, NULL))
 		exit(EXIT_FAILURE);
 }
-

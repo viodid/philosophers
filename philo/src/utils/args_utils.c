@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 10:40:29 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/23 13:24:55 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/30 18:01:24 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ u_int8_t	parse_arguments(int argc, char *argv[])
 	return (EXIT_SUCCESS);
 }
 
-/* Unsigned atoi, it only should accept an unsigned int represented as a string.*/
+// Unsigned atoi, it only should accept an unsigned int represented as a string.
 int	ft_u_atoi(char *str)
 {
 	int		output;
@@ -47,7 +47,7 @@ int	ft_u_atoi(char *str)
 
 	i = 0;
 	output = 0;
-	while(str[i])
+	while (str[i])
 	{
 		output = output * 10 + (int)(str[i] - 48);
 		i++;
