@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/philo_bonus.h"
 
 static long		compute_time_ms(t_timeval upper_val, t_timeval lower_val);
 

@@ -6,30 +6,58 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/31 13:12:06 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/31 14:37:26 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/philo.h"
+#include "../include/philo_bonus.h"
 
 static void	philo(void)
 {
 	printf("child pid: %d\n", getpid());
 }
 
+/* create a semaphore and initialize it with `no_philos`.
+ * allocate an array of pids
+ * everytime a child process is created, store its pid into pids.
+ * to keep things simple, don't nest child processes.
+ * if process is a child, execute philo routine and watcher.
+ * the watcher routine should be executed asynchronously.
+ * in the main process, wait for all the children to change state
+*/
 void	philosophers(t_args *args) {
-	pid_t *pids;
-	uint i;
+	pid_t	*pids;
+	uint	i;
+	sem_t	*sem;
 
 	if (args->no_philo == 0)
 		return;
-	// create a semaphore and initialize it with no_philos.
-	// allocate an array of pids
-	// everytime a child process is created, store its pid into pids.
-	// to keep things simple, don't nest child processes.
-	// if process is a child, execute philo routine and watcher
-	// in the main process, wait for all the children to change state
+
+	sem = sem_open(SEM_FORKS, O_CREAT | O_EXCL, 0400, args->no_philo);
+	if (sem == SEM_FAILED)
+	{
+		perror("semaphore error");
+		exit(EXIT_FAILURE);
+	}
+	int wait_ret = sem_wait(sem);
+	if (wait_ret == -1)
+	{
+		perror("sem_wait");
+		exit(EXIT_FAILURE);
+	}
+	int ret = sem_unlink(SEM_FORKS);
+	if (ret == -1)
+	{
+		perror("sem unlink");
+		exit(EXIT_FAILURE);
+	}
+
 	pids = (pid_t *) malloc(sizeof(int) * args->no_philo);
+	if (!pids)
+	{
+		perror("malloc error");
+		exit(EXIT_FAILURE);
+	}
 	pids[0] = fork();
 	i = 1;
 	while (i < args->no_philo)

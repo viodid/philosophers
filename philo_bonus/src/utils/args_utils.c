@@ -6,11 +6,11 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 10:40:29 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 18:01:24 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/31 14:04:09 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/philo.h"
+#include "../../include/philo_bonus.h"
 
 static u_int8_t	ft_is_not_num(const char *str)
 {
