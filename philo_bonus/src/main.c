@@ -6,15 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 19:46:24 by dyunta           ###   ########.fr       */
+/*   Updated: 2024/12/31 12:50:02 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
 static t_args			*allocate_args(int argc, char *argv[]);
-static t_philosopher	*allocate_philosophers(t_args *args);
-static void				initialize_mutexes(t_philosopher *head);
 
 /* SUBJECT
  * 1. Each philosopher should be a process.
