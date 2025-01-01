@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/31 14:37:26 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/01 23:57:37 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	philosophers(t_args *args) {
 	if (args->no_philo == 0)
 		return;
 
-	sem = sem_open(SEM_FORKS, O_CREAT | O_EXCL, 0400, args->no_philo);
+	sem = sem_open(SEM_FORKS, O_CREAT, O_RDWR, args->no_philo);
 	if (sem == SEM_FAILED)
 	{
 		perror("semaphore error");
@@ -41,10 +41,14 @@ void	philosophers(t_args *args) {
 	}
 	int wait_ret = sem_wait(sem);
 	if (wait_ret == -1)
-	{
 		perror("sem_wait");
-		exit(EXIT_FAILURE);
-	}
+	else
+		printf("sem wait: %d\n", wait_ret);
+	int post_ret = sem_post(sem);
+	if (post_ret == -1)
+		perror("sem_post");
+	else
+		printf("sem post: %d\n", post_ret);
 	int ret = sem_unlink(SEM_FORKS);
 	if (ret == -1)
 	{
