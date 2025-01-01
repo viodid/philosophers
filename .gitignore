@@ -57,3 +57,5 @@ dkms.conf
 
 # IDE
 .idea
+philo
+philo_bonus

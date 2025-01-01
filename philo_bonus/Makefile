@@ -1,4 +1,4 @@
-BINARY=philo
+BINARY=philo_bonus
 CODEDIRS=src
 INCDIR=./include/
 
