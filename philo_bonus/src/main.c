@@ -6,13 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/31 12:50:02 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 00:11:36 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
-static t_args			*allocate_args(int argc, char *argv[]);
+static t_args	allocate_args(int argc, char *argv[]);
 
 /* SUBJECT
  * 1. Each philosopher should be a process.
@@ -33,7 +33,7 @@ static t_args			*allocate_args(int argc, char *argv[]);
 
 int	main(int argc, char *argv[])
 {
-	t_args			*args;
+	t_args	args;
 
 	if (parse_arguments(argc, argv))
 	{
@@ -43,24 +43,20 @@ int	main(int argc, char *argv[])
 	}
 	args = allocate_args(argc, argv);
 	philosophers(args);
-	free(args);
 	return (EXIT_SUCCESS);
 }
 
-static t_args	*allocate_args(int argc, char *argv[])
+static t_args	allocate_args(int argc, char *argv[])
 {
-	t_args	*output;
+	t_args	output;
 
-	output = (t_args *)malloc(sizeof(t_args));
-	if (!output)
-		exit(EXIT_FAILURE);
-	output->no_philo = ft_u_atoi(argv[1]);
-	output->time_to_die = ft_u_atoi(argv[2]);
-	output->time_to_eat = ft_u_atoi(argv[3]);
-	output->time_to_sleep = ft_u_atoi(argv[4]);
+	output.no_philo = ft_u_atoi(argv[1]);
+	output.time_to_die = ft_u_atoi(argv[2]);
+	output.time_to_eat = ft_u_atoi(argv[3]);
+	output.time_to_sleep = ft_u_atoi(argv[4]);
 	if (argc == 6)
-		output->total_no_meals = (ft_u_atoi(argv[5]));
+		output.total_no_meals = (ft_u_atoi(argv[5]));
 	else
-		output->total_no_meals = -1;
+		output.total_no_meals = -1;
 	return (output);
 }
