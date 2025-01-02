@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 00:11:46 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 11:46:04 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,11 @@ typedef struct s_args
 
 typedef struct s_philosopher
 {
-	t_args		*args;
-	int			no_meals;
-	uint		process_no;
-	t_timeval	timestamp;
+	t_args					*args;
+	int						no_meals;
+	uint					process_no;
+	t_timeval				timestamp;
+	struct s_philosopher	*next;
 }	t_philosopher;
 
 typedef enum e_states
@@ -63,7 +64,7 @@ typedef enum e_states
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
-void		philosophers(t_args args);
+void		philosophers(t_philosopher *philo);
 void		*watcher_routine(void *data);
 void		state_printer(t_philosopher *philo, t_states state);
 

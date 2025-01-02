@@ -6,13 +6,14 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 00:11:36 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 11:46:55 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
-static t_args	allocate_args(int argc, char *argv[]);
+static t_args			*allocate_args(int argc, char *argv[]);
+static t_philosopher	*allocate_philosophers(t_args *args);
 
 /* SUBJECT
  * 1. Each philosopher should be a process.
@@ -33,7 +34,8 @@ static t_args	allocate_args(int argc, char *argv[]);
 
 int	main(int argc, char *argv[])
 {
-	t_args	args;
+	t_args			*args;
+	t_philosopher	*philo;
 
 	if (parse_arguments(argc, argv))
 	{
@@ -42,21 +44,60 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
-	philosophers(args);
+	philo = allocate_philosophers(args);
+	philosophers(philo);
+	free(args);
 	return (EXIT_SUCCESS);
 }
 
-static t_args	allocate_args(int argc, char *argv[])
+static t_args	*allocate_args(int argc, char *argv[])
 {
-	t_args	output;
+	t_args	*output;
 
-	output.no_philo = ft_u_atoi(argv[1]);
-	output.time_to_die = ft_u_atoi(argv[2]);
-	output.time_to_eat = ft_u_atoi(argv[3]);
-	output.time_to_sleep = ft_u_atoi(argv[4]);
+	output = (t_args *)malloc(sizeof(t_args));
+	if (!output)
+		exit(EXIT_FAILURE);
+	output->no_philo = ft_u_atoi(argv[1]);
+	output->time_to_die = ft_u_atoi(argv[2]);
+	output->time_to_eat = ft_u_atoi(argv[3]);
+	output->time_to_sleep = ft_u_atoi(argv[4]);
 	if (argc == 6)
-		output.total_no_meals = (ft_u_atoi(argv[5]));
+		output->total_no_meals = (ft_u_atoi(argv[5]));
 	else
-		output.total_no_meals = -1;
+		output->total_no_meals = -1;
 	return (output);
+}
+
+/*
+ * Create one struct for every philosopher.
+ * Each struct should point to the next philosopher.
+ * The last node of the linked list should point to the first.
+*/
+static t_philosopher	*allocate_philosophers(t_args *args)
+{
+	t_philosopher	*header;
+	t_philosopher	*philo;
+	uint			i;
+
+	if (args->no_philo == 0)
+		return (NULL);
+	header = (t_philosopher *) malloc(sizeof(t_philosopher));
+	if (!header)
+		exit(EXIT_FAILURE);
+	philo = header;
+	i = 1;
+	while (i < args->no_philo)
+	{
+		philo->next = (t_philosopher *) malloc(sizeof(t_philosopher));
+		if (!philo->next)
+			exit(EXIT_FAILURE);
+		philo->args = args;
+		philo->process_no = i;
+		philo = philo->next;
+		i++;
+	}
+	philo->next = header;
+	philo->args = args;
+	philo->process_no = i;
+	return (header);
 }
