@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 11:46:55 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 12:56:36 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static t_philosopher	*allocate_philosophers(t_args *args);
 int	main(int argc, char *argv[])
 {
 	t_args			*args;
-	t_philosopher	*philo;
+	t_philosopher	*header;
 
 	if (parse_arguments(argc, argv))
 	{
@@ -44,9 +44,10 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
-	philo = allocate_philosophers(args);
-	philosophers(philo);
+	header = allocate_philosophers(args);
+	philosophers(header);
 	free(args);
+	free_philosophers(header);
 	return (EXIT_SUCCESS);
 }
 
@@ -73,11 +74,12 @@ static t_args	*allocate_args(int argc, char *argv[])
  * Each struct should point to the next philosopher.
  * The last node of the linked list should point to the first.
 */
-static t_philosopher	*allocate_philosophers(t_args *args)
+
+static t_philosopher    *allocate_philosophers(t_args *args)
 {
-	t_philosopher	*header;
-	t_philosopher	*philo;
-	uint			i;
+	t_philosopher   *header;
+	t_philosopher   *philo;
+	uint                    i;
 
 	if (args->no_philo == 0)
 		return (NULL);
@@ -93,10 +95,11 @@ static t_philosopher	*allocate_philosophers(t_args *args)
 			exit(EXIT_FAILURE);
 		philo->args = args;
 		philo->process_no = i;
+		philo->no_meals = 0;
 		philo = philo->next;
 		i++;
 	}
-	philo->next = header;
+	philo->next = NULL;
 	philo->args = args;
 	philo->process_no = i;
 	return (header);

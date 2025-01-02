@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 11:46:04 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 12:56:08 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,9 @@ typedef enum e_states
 
 u_int8_t	parse_arguments(int argc, char *argv[]);
 int			ft_u_atoi(char *str);
-void		philosophers(t_philosopher *philo);
+void		philosophers(t_philosopher *header);
 void		*watcher_routine(void *data);
 void		state_printer(t_philosopher *philo, t_states state);
+void		free_philosophers(t_philosopher *philo);
 
 #endif

@@ -6,47 +6,15 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 11:49:20 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 12:53:40 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
-static sem_t	*open_semaphore(const t_args *args, const char *sem_name)
-{
-	sem_t	*sem;
-
-	sem = sem_open(sem_name, O_CREAT, O_RDWR, args->no_philo);
-	if (sem == SEM_FAILED)
-	{
-		perror("semaphore error"); // remove forbidden func
-		exit(EXIT_FAILURE);
-	}
-	return (sem);
-}
-
-static void		close_semaphore(const char *sem_name)
-{
-	int	ret;
-
-	ret = sem_unlink(sem_name);
-	if (ret == -1)
-	{
-		perror("sem unlink"); // rm forbidden func
-		exit(EXIT_FAILURE);
-	}
-}
-
-static void	philo_process(t_philosopher *philo)
-{
-	sem_t	*sem;
-
-	sem = open_semaphore(philo->args, SEM_FORKS);
-
-	usleep(1000 * 1000);
-	printf("child pid: %d\n", getpid());
-	printf("args: %d\n", philo->args->no_philo);
-}
+static void		philo_process(t_philosopher *philo);
+static sem_t	*open_semaphore(const t_args *args, const char *sem_name);
+static void		close_semaphore(const char *sem_name);
 
 /* create a semaphore and initialize it with `no_philos`.
  * allocate an array of pids
@@ -56,14 +24,15 @@ static void	philo_process(t_philosopher *philo)
  * the watcher routine should be executed asynchronously.
  * in the main process, wait for all the children to change state
 */
-void	philosophers(t_philosopher *philo) {
+void	philosophers(t_philosopher *header) {
 	pid_t	*pids;
 	uint	i;
 	sem_t	*sem;
+	t_philosopher	*philo;
 
+	philo = header;
 	if (philo->args->no_philo == 0)
 		return;
-
 	sem = open_semaphore(philo->args, SEM_FORKS);
 
 	int wait_ret = sem_wait(sem);
@@ -108,3 +77,40 @@ void	philosophers(t_philosopher *philo) {
 	printf("parent pid: %d\n", getpid());
 	close_semaphore(SEM_FORKS);
 }
+
+static void	philo_process(t_philosopher *philo)
+{
+	// sem_t	*sem;
+
+	// sem = open_semaphore(philo->args, SEM_FORKS);
+
+	usleep(1000 * 1000);
+	printf("child pid: %d\n", getpid());
+	printf("args: %d\n", philo->args->no_philo);
+}
+
+static sem_t	*open_semaphore(const t_args *args, const char *sem_name)
+{
+	sem_t	*sem;
+
+	sem = sem_open(sem_name, O_CREAT, O_RDWR, args->no_philo);
+	if (sem == SEM_FAILED)
+	{
+		perror("semaphore error"); // remove forbidden func
+		exit(EXIT_FAILURE);
+	}
+	return (sem);
+}
+
+static void		close_semaphore(const char *sem_name)
+{
+	int	ret;
+
+	ret = sem_unlink(sem_name);
+	if (ret == -1)
+	{
+		perror("sem unlink"); // rm forbidden func
+		exit(EXIT_FAILURE);
+	}
+}
+
