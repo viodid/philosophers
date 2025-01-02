@@ -6,16 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 14:15:15 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/02 14:58:44 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
 static void		philo_process(t_philosopher *philo);
-static sem_t	*open_semaphore(const t_args *args, const char *sem_name);
-static void		close_semaphore(sem_t *sem);
-static void		unlink_semaphore(const char *sem_name);
 static t_philosopher	*select_philo(t_philosopher *head, uint i);
 
 /* create a semaphore and initialize it with `no_philos`.
@@ -56,6 +53,7 @@ void	philosophers(t_philosopher *header) {
 	if (pids[0] == 0)
 	{
 		free(pids);
+		close_semaphore(sem);
 		philo_process(select_philo(header, 1));
 		return ;
 	}
@@ -67,6 +65,7 @@ void	philosophers(t_philosopher *header) {
 		if (pids[i] == 0)
 		{
 			free(pids);
+			close_semaphore(sem);
 			philo_process(select_philo(header, i + 1));
 			return ;
 		}
@@ -82,6 +81,7 @@ void	philosophers(t_philosopher *header) {
 	}
 	free(pids);
 	printf("parent pid: %d\n", getpid());
+	close_semaphore(sem);
 	unlink_semaphore(SEM_FORKS);
 }
 
@@ -89,11 +89,29 @@ static void	philo_process(t_philosopher *philo)
 {
 	sem_t	*sem;
 
-	sem = open_semaphore(philo->args, SEM_FORKS);
-
-	usleep(1000 * 1000);
-	printf("child pid: %d\n", getpid());
+	printf("child pid: %d\n", getpid()); // rm
 	printf("process_no: %d\n", philo->process_no);
+
+	sem = open_semaphore(philo->args, SEM_FORKS);
+	if (philo->process_no % 2 == 0)
+		usleep(500);
+	gettimeofday(&philo->timestamp, NULL);
+
+	while (philo->no_meals != philo->args->total_no_meals)
+	{
+		wait_semaphore(sem);
+		wait_semaphore(sem);
+		state_printer(philo, FORK);
+		gettimeofday(&philo->timestamp, NULL);
+		state_printer(philo, EAT);
+		usleep(philo->args->time_to_sleep * 1000);
+		post_semaphore(sem);
+		post_semaphore(sem);
+		philo->no_meals++;
+		state_printer(philo, SLEEP);
+		usleep(philo->args->time_to_sleep * 1000);
+		state_printer(philo, THINK);
+	}
 	close_semaphore(sem);
 }
 
@@ -109,37 +127,4 @@ static t_philosopher	*select_philo(t_philosopher *head, const uint i)
 		philo = philo->next;
 	}
 	return (philo);
-}
-
-static sem_t	*open_semaphore(const t_args *args, const char *sem_name)
-{
-	sem_t	*sem;
-
-	sem = sem_open(sem_name, O_CREAT, 0600, args->no_philo);
-	if (sem == SEM_FAILED)
-	{
-		perror("semaphore error"); // remove forbidden func
-		exit(EXIT_FAILURE);
-	}
-	return (sem);
-}
-
-static void	unlink_semaphore(const char *sem_name)
-{
-	printf("unlink_semaphore %s\n", sem_name);
-	if (sem_unlink(sem_name))
-	{
-		perror("sem unlink"); // rm forbidden func
-		exit(EXIT_FAILURE);
-	}
-}
-
-static void	close_semaphore(sem_t *sem)
-{
-	printf("close_semaphore\n");
-	if (sem_close(sem))
-	{
-		perror("sem close"); //rm forbidden
-		exit(EXIT_FAILURE);
-	}
 }

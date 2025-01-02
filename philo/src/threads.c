@@ -44,9 +44,9 @@ static void	*philo_routine(void *data)
 
 	philo = (t_philosopher *)data;
 	philo->no_meals = 0;
-	gettimeofday(&philo->timestamp, NULL);
 	if (philo->thread_no % 2 == 0)
 		usleep(5000);
+	gettimeofday(&philo->timestamp, NULL);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		pthread_mutex_lock(&philo->m_fork);
