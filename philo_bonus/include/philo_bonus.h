@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 14:54:39 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/03 11:39:17 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_philosopher
 	int						no_meals;
 	uint					process_no;
 	t_timeval				timestamp;
+	pthread_t				thread;
 	struct s_philosopher	*next;
 }	t_philosopher;
 

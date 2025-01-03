@@ -96,6 +96,7 @@ static void	philo_process(t_philosopher *philo)
 	if (philo->process_no % 2 == 0)
 		usleep(500);
 	gettimeofday(&philo->timestamp, NULL);
+	// TODO: watcher thread routine
 
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
