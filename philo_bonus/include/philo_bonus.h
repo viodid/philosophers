@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/03 11:39:17 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/03 13:13:13 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,10 @@ void		unlink_semaphore(const char *sem_name);
 void		close_semaphore(sem_t *sem);
 void		wait_semaphore(sem_t *sem);
 void		post_semaphore(sem_t *sem);
-void		create_thread(t_philosopher *philo);
-void		join_thread(t_philosopher *philo);
-void	free_pids_create_thread(pid_t *pids, t_philosopher *head, uint process_no, sem_t *sem);
+void		create_thread(pthread_t* thread, void *routine, void *payload);
+void		join_thread(pthread_t thread);
+void		detach_thread(pthread_t thread);
+void		handle_threads(pid_t *pids, t_philosopher *head, uint process_no, sem_t *sem);
+void		*philo_thread(void *data);
 
 #endif

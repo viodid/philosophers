@@ -6,13 +6,11 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/03 12:30:11 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/03 13:01:25 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
-
-static void		philo_process(t_philosopher *philo);
 
 /* create a semaphore and initialize it with `no_philos`.
  * allocate an array of pids
@@ -38,14 +36,14 @@ void	philosophers(t_philosopher *header) {
 	}
 	pids[0] = fork();
 	if (pids[0] == 0)
-		return free_pids_create_thread(pids, header, 1, sem);
+		return (handle_threads(pids, header, 1, sem));
 	i = 1;
 	while (i < header->args->no_philo)
 	{
 		if (pids[i - 1] != 0)
 			pids[i] = fork();
 		if (pids[i] == 0)
-			return free_pids_create_thread(pids, header, i + 1, sem);
+			return (handle_threads(pids, header, i + 1, sem));
 		i++;
 	}
 	i = 0;
@@ -62,10 +60,12 @@ void	philosophers(t_philosopher *header) {
 	unlink_semaphore(SEM_FORKS);
 }
 
-static void	philo_process(t_philosopher *philo)
+void	*philo_thread(void *data)
 {
 	sem_t	*sem;
+	t_philosopher	*philo;
 
+	philo = (t_philosopher *)data;
 	printf("child pid: %d\n", getpid()); // rm
 	printf("process_no: %d\n", philo->process_no);
 
@@ -73,7 +73,6 @@ static void	philo_process(t_philosopher *philo)
 	if (philo->process_no % 2 == 0)
 		usleep(500);
 	gettimeofday(&philo->timestamp, NULL);
-	create_thread(philo);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		wait_semaphore(sem);
@@ -90,4 +89,5 @@ static void	philo_process(t_philosopher *philo)
 		state_printer(philo, THINK);
 	}
 	close_semaphore(sem);
+	return (NULL);
 }
