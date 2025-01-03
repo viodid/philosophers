@@ -29,3 +29,12 @@ void	join_thread(t_philosopher *philo)
 		exit(EXIT_FAILURE); // forbidden func
 	}
 }
+
+void	detach_thread(t_philosopher *philo)
+{
+	if (pthread_detach(philo->thread))
+	{
+		perror("pthread_detach"); // FORBIDDEN
+		exit(EXIT_FAILURE);
+	}
+}

@@ -74,5 +74,8 @@ void		unlink_semaphore(const char *sem_name);
 void		close_semaphore(sem_t *sem);
 void		wait_semaphore(sem_t *sem);
 void		post_semaphore(sem_t *sem);
+void		create_thread(t_philosopher *philo);
+void		join_thread(t_philosopher *philo);
+void	free_pids_create_thread(pid_t *pids, t_philosopher *head, uint process_no, sem_t *sem);
 
 #endif

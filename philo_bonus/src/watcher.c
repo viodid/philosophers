@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 20:19:04 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/03 11:52:49 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,12 @@ static long		compute_time_ms(t_timeval upper_val, t_timeval lower_val);
 void	*watcher_routine(void *data)
 {
 	t_philosopher	*philo;
-	t_timeval	curr_time;
-	long		op;
+	t_timeval		curr_time;
+	long			op;
 
 	philo = (t_philosopher *)data;
-	while (TRUE)
+	while (philo->no_meals != philo->args->total_no_meals)
 	{
-		if (philo->no_meals == philo->args->total_no_meals)
-			return (NULL);
 		gettimeofday(&curr_time, NULL);
 		op = compute_time_ms(curr_time, philo->timestamp);
 
@@ -39,7 +37,7 @@ void	*watcher_routine(void *data)
 	return (NULL);
 }
 
-static long	compute_time_ms(t_timeval upper_val, t_timeval lower_val)
+static long	compute_time_ms(const t_timeval upper_val, const t_timeval lower_val)
 {
 	long	sec;
 	long	micros;
