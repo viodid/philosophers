@@ -6,15 +6,15 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/03 12:23:54 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/03 13:19:55 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/03 13:51:07 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/philo_bonus.h"
 
-static t_philosopher	*select_philo(t_philosopher *head, const uint process_no);
+static t_philosopher	*select_philo(t_philosopher *head, uint process_no);
 
-void	handle_threads(pid_t *pids, t_philosopher *head, uint process_no, sem_t *sem)
+void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_no, sem_t *sem)
 {
 	t_philosopher	*philo;
 	pthread_t		thread_watcher;
@@ -22,6 +22,8 @@ void	handle_threads(pid_t *pids, t_philosopher *head, uint process_no, sem_t *se
 	free(pids);
 	close_semaphore(sem);
 	philo = select_philo(head, process_no);
+	if (philo->process_no % 2 == 0)
+		usleep(500);
 	create_thread(&philo->thread, philo_thread, (void *)philo);
 	create_thread(&thread_watcher, watcher_routine, (void *)philo);
 	detach_thread(philo->thread);

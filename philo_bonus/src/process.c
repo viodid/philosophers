@@ -70,8 +70,6 @@ void	*philo_thread(void *data)
 	printf("process_no: %d\n", philo->process_no);
 
 	sem = open_semaphore(philo->args, SEM_FORKS);
-	if (philo->process_no % 2 == 0)
-		usleep(500);
 	gettimeofday(&philo->timestamp, NULL);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{

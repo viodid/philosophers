@@ -18,15 +18,17 @@ void	*watcher_routine(void *data)
 {
 	t_philosopher	*philo;
 	t_timeval		curr_time;
-	long			op;
+	long			time;
 
 	philo = (t_philosopher *)data;
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		gettimeofday(&curr_time, NULL);
-		op = compute_time_ms(curr_time, philo->timestamp);
+		time = compute_time_ms(curr_time, philo->timestamp);
 
-		if (op > (philo->args->time_to_die * 1000))
+		printf("time: %ld - time_to_die: %u\n", time, philo->args->time_to_die * 1000);
+		// BUGFIX: do not compare agains time_to_die
+		if (time > (philo->args->time_to_die * 1000))
 		{
 //			pthread_mutex_lock(&philo->m_die); TODO: should be a semaphore
 			state_printer(philo, DIED);
