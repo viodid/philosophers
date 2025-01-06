@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/03 13:01:25 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 15:11:13 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,11 +66,12 @@ void	*philo_thread(void *data)
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
+	gettimeofday(&philo->timestamp, NULL);
+	sem = open_semaphore(philo->args, SEM_FORKS);
+
 	printf("child pid: %d\n", getpid()); // rm
 	printf("process_no: %d\n", philo->process_no);
 
-	sem = open_semaphore(philo->args, SEM_FORKS);
-	gettimeofday(&philo->timestamp, NULL);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		wait_semaphore(sem);
