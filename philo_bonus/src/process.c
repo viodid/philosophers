@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:12:02 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 16:34:27 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,32 +78,36 @@ static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_
 
 static void	*philo_thread(void *data)
 {
-	sem_t	*sem;
+	sem_t	*sem_fork;
+	sem_t	*sem_die;
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
 	gettimeofday(&philo->timestamp, NULL);
-	sem = open_semaphore(philo->args, SEM_FORKS);
+	sem_fork = open_semaphore(SEM_FORKS, philo->args->no_philo);
+	sem_die = open_semaphore(SEM_DIE, 1);
 
 	printf("child pid: %d\n", getpid()); // rm
 	printf("process_no: %d\n", philo->process_no);
 
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
-		wait_semaphore(sem);
-		wait_semaphore(sem);
+		wait_semaphore(sem_fork);
+		wait_semaphore(sem_fork);
+		wait_semaphore(sem_die);
 		state_printer(philo, FORK);
 		gettimeofday(&philo->timestamp, NULL);
 		state_printer(philo, EAT);
 		usleep(philo->args->time_to_sleep * 1000);
-		post_semaphore(sem);
-		post_semaphore(sem);
+		post_semaphore(sem_fork);
+		post_semaphore(sem_fork);
+		post_semaphore(sem_die);
 		philo->no_meals++;
 		state_printer(philo, SLEEP);
 		usleep(philo->args->time_to_sleep * 1000);
 		state_printer(philo, THINK);
 	}
-	close_semaphore(sem);
+	close_semaphore(sem_fork);
 	return (NULL);
 }
 

@@ -12,11 +12,11 @@
 
 #include "../../include/philo_bonus.h"
 
-sem_t	*open_semaphore(const t_args *args, const char *sem_name)
+sem_t	*open_semaphore(const char *sem_name, uint init_val)
 {
 	sem_t	*sem;
 
-	sem = sem_open(sem_name, O_CREAT, 0666, args->no_philo);
+	sem = sem_open(sem_name, O_CREAT, 0666, init_val);
 	if (sem == SEM_FAILED)
 	{
 		perror("semaphore error"); // remove forbidden func

@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:13:23 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 16:29:11 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,6 @@ typedef struct s_philosopher
 	uint					process_no;
 	t_timeval				timestamp;
 	pthread_t				thread;
-	sem_t					*fork_sem;
-	sem_t					*die_sem;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
@@ -72,7 +70,7 @@ void		philosophers(t_philosopher *header);
 void		*watcher_routine(void *data);
 void		state_printer(t_philosopher *philo, t_states state);
 void		free_philosophers(t_philosopher *philo);
-sem_t		*open_semaphore(const t_args *args, const char *sem_name);
+sem_t		*open_semaphore(const char *sem_name, uint init_val);
 void		unlink_semaphore(const char *sem_name);
 void		close_semaphore(sem_t *sem);
 void		wait_semaphore(sem_t *sem);

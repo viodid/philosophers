@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:20:43 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 16:29:14 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,9 @@ static t_philosopher    *allocate_philosophers(t_args *args)
 	return (header);
 }
 
-static void	initialize_philosopher(t_philosopher *philo, t_args *args, uint process_no)
+ static void	initialize_philosopher(t_philosopher *philo, t_args *args, const uint process_no)
 {
 	philo->process_no = process_no;
 	philo->args = args;
 	philo->no_meals = 0;
-	philo->fork_sem = open_semaphore(args, SEM_FORKS);
-	philo->die_sem = open_semaphore(args, SEM_DIE);
 }
