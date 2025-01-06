@@ -33,7 +33,7 @@ void	*watcher_routine(void *data)
 			state_printer(philo, DIED);
 			return (NULL);
 		}
-		usleep(100); // TODO: set to 10
+		usleep(100);
 	}
 	return (NULL);
 }

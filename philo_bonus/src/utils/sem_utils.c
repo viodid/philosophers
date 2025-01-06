@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:39:25 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/02 14:54:13 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 15:38:28 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ sem_t	*open_semaphore(const t_args *args, const char *sem_name)
 {
 	sem_t	*sem;
 
-	sem = sem_open(sem_name, O_CREAT, 0600, args->no_philo);
+	sem = sem_open(sem_name, O_CREAT, 0666, args->no_philo);
 	if (sem == SEM_FAILED)
 	{
 		perror("semaphore error"); // remove forbidden func

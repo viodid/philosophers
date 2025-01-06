@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/03 13:13:13 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 16:13:23 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define TRUE		1
 # define FALSE		0
 # define SEM_FORKS	"/forks"
+# define SEM_DIE	"/die"
 # define RED_BOLD	"\001\033[1;31m\002"
 # define GRN_BOLD	"\001\033[1;32m\002"
 # define X_BOLD		"\001\033[1;33m\002"
@@ -51,6 +52,8 @@ typedef struct s_philosopher
 	uint					process_no;
 	t_timeval				timestamp;
 	pthread_t				thread;
+	sem_t					*fork_sem;
+	sem_t					*die_sem;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
@@ -77,7 +80,5 @@ void		post_semaphore(sem_t *sem);
 void		create_thread(pthread_t* thread, void *routine, void *payload);
 void		join_thread(pthread_t thread);
 void		detach_thread(pthread_t thread);
-void		handle_threads(pid_t *pids, t_philosopher *head, uint process_no, sem_t *sem);
-void		*philo_thread(void *data);
 
 #endif
