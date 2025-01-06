@@ -50,6 +50,7 @@ static void	*philo_routine(void *data)
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		pthread_mutex_lock(&philo->m_fork);
+		state_printer(philo, FORK);
 		pthread_mutex_lock(&philo->next->m_fork);
 		pthread_mutex_lock(&philo->m_die);
 		state_printer(philo, FORK);

@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 18:26:57 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 19:54:46 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	*watcher_routine(void *data)
 		if (time > (philo->args->time_to_die * 1000))
 		{
 			printf("time: %ld\n", time);
-			wait_semaphore(sem_die);
 			state_printer(philo, DIED);
+			wait_semaphore(sem_die);
 			break;
 		}
 		usleep(100);

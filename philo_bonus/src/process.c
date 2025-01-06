@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 19:15:57 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 19:56:21 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,10 @@ void	philosophers(t_philosopher *header)
 	unlink_semaphore(SEM_DIE);
 }
 
+/*
+ * This function block execution until one of the process ids in pids has already finished.
+ * Then, it kills the remaining processes ids in pids.
+*/
 static void	close_processes(const pid_t *pids, const uint no_processes)
 {
 	uint		i;
@@ -122,6 +126,7 @@ static void	*philo_thread(void *data)
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
 		wait_semaphore(sem_fork);
+		state_printer(philo, FORK);
 		wait_semaphore(sem_fork);
 		wait_semaphore(sem_die);
 		state_printer(philo, FORK);
