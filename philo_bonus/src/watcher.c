@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 15:24:09 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 18:26:57 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@ void	*watcher_routine(void *data)
 	t_philosopher	*philo;
 	t_timeval		curr_time;
 	long			time;
+	sem_t			*sem_die;
 
 	philo = (t_philosopher *)data;
+	sem_die = open_semaphore(SEM_DIE, 1);
 	usleep(1000 * 10);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{
@@ -29,12 +31,13 @@ void	*watcher_routine(void *data)
 		if (time > (philo->args->time_to_die * 1000))
 		{
 			printf("time: %ld\n", time);
-//			pthread_mutex_lock(&philo->m_die); TODO: should be a semaphore
+			wait_semaphore(sem_die);
 			state_printer(philo, DIED);
-			return (NULL);
+			break;
 		}
 		usleep(100);
 	}
+	close_semaphore(sem_die);
 	return (NULL);
 }
 

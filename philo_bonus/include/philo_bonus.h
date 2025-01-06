@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:29:11 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 18:58:42 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ void		post_semaphore(sem_t *sem);
 void		create_thread(pthread_t* thread, void *routine, void *payload);
 void		join_thread(pthread_t thread);
 void		detach_thread(pthread_t thread);
+void		*wait_process(void *data);
 
 #endif

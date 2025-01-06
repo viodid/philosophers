@@ -6,12 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:34:27 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/06 19:15:57 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
+static void	close_processes(const pid_t *pids, const uint no_processes);
 static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_no);
 static t_philosopher	*select_philo(t_philosopher *head, uint process_no);
 static void	*philo_thread(void *data);
@@ -24,7 +25,8 @@ static void	*philo_thread(void *data);
  * the watcher routine should be executed asynchronously.
  * in the main process, wait for all the children to change state
 */
-void	philosophers(t_philosopher *header) {
+void	philosophers(t_philosopher *header)
+{
 	pid_t	*pids;
 	uint	i;
 
@@ -48,17 +50,30 @@ void	philosophers(t_philosopher *header) {
 			return (handle_threads(pids, header, i + 1));
 		i++;
 	}
+	close_processes(pids, header->args->no_philo);
+	printf("parent pid: %d\n", getpid());
+	free(pids);
+	unlink_semaphore(SEM_FORKS);
+	unlink_semaphore(SEM_DIE);
+}
+
+static void	close_processes(const pid_t *pids, const uint no_processes)
+{
+	uint		i;
+	pid_t		dealloc_process;
+
 	i = 0;
-	while (i < header->args->no_philo)
+
+	dealloc_process = waitpid(-1, NULL, 0);
+	if (dealloc_process)
+		perror("waitpid");
+	while (i < no_processes)
 	{
-		if (pids[i] != 0)
-			if (waitpid(pids[i], NULL, 0) == -1)
-				perror("waitpid");
+		printf("pid: %d\n", pids[i]);
+		if (kill(pids[i], SIGKILL) && pids[i] != dealloc_process)
+			perror("kill");
 		i++;
 	}
-	free(pids);
-	printf("parent pid: %d\n", getpid());
-	unlink_semaphore(SEM_FORKS);
 }
 
 static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_no)
@@ -74,6 +89,20 @@ static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_
 	create_thread(&thread_watcher, watcher_routine, (void *)philo);
 	detach_thread(philo->thread);
 	join_thread(thread_watcher);
+}
+
+static t_philosopher	*select_philo(t_philosopher *head, const uint process_no)
+{
+	t_philosopher	*philo;
+
+	philo = head;
+	while (philo)
+	{
+		if (philo->process_no == process_no)
+			return (philo);
+		philo = philo->next;
+	}
+	return (philo);
 }
 
 static void	*philo_thread(void *data)
@@ -98,7 +127,7 @@ static void	*philo_thread(void *data)
 		state_printer(philo, FORK);
 		gettimeofday(&philo->timestamp, NULL);
 		state_printer(philo, EAT);
-		usleep(philo->args->time_to_sleep * 1000);
+		usleep(philo->args->time_to_eat * 1000);
 		post_semaphore(sem_fork);
 		post_semaphore(sem_fork);
 		post_semaphore(sem_die);
@@ -108,19 +137,6 @@ static void	*philo_thread(void *data)
 		state_printer(philo, THINK);
 	}
 	close_semaphore(sem_fork);
+	close_semaphore(sem_die);
 	return (NULL);
-}
-
-static t_philosopher	*select_philo(t_philosopher *head, const uint process_no)
-{
-	t_philosopher	*philo;
-
-	philo = head;
-	while (philo)
-	{
-		if (philo->process_no == process_no)
-			return (philo);
-		philo = philo->next;
-	}
-	return (philo);
 }
