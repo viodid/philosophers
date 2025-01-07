@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 12:11:24 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:55:45 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_philosopher
 	int						no_meals;
 	uint					process_no;
 	t_timeval				timestamp;
+	char					*custom_sem_name;
 	struct s_philosopher	*next;
 }	t_philosopher;
 
@@ -62,23 +63,23 @@ typedef enum e_states
 	DIED
 }	t_states;
 
-u_int8_t	parse_arguments(int argc, char *argv[]);
-int			ft_u_atoi(char *str);
-void		philosophers(t_philosopher *header);
-void		*watcher_routine(void *data);
-void		state_printer(t_philosopher *philo, t_states state);
-void		free_philosophers(t_philosopher *philo);
-sem_t		*open_semaphore(const char *sem_name, uint init_val);
-void		unlink_semaphore(const char *sem_name);
-void		close_semaphore(sem_t *sem);
-void		wait_semaphore(sem_t *sem);
-void		post_semaphore(sem_t *sem);
-void		create_thread(pthread_t* thread, void *routine, void *payload);
-void		join_thread(pthread_t thread);
-void		detach_thread(pthread_t thread);
-void		*wait_process(void *data);
-char		*hash_name(uint process_no);
-void		deallocate_semaphores(t_philosopher *head);
+u_int8_t		parse_arguments(int argc, char *argv[]);
+int				ft_u_atoi(char *str);
+void			philosophers(t_philosopher *header);
+void			*watcher_routine(void *data);
+void			state_printer(t_philosopher *philo, t_states state);
+void			free_philosophers(t_philosopher *philo);
+sem_t			*open_semaphore(const char *sem_name, uint init_val);
+void			unlink_semaphore(const char *sem_name);
+void			close_semaphore(sem_t *sem);
+void			wait_semaphore(sem_t *sem);
+void			post_semaphore(sem_t *sem);
+void			create_thread(pthread_t *thread, void *routine, void *payload);
+void			join_thread(pthread_t thread);
+void			detach_thread(pthread_t thread);
+void			*wait_process(void *data);
+char			*hash_name(uint process_no);
+void			deallocate_semaphores(t_philosopher *head);
 t_philosopher	*select_philo(t_philosopher *head, uint process_no);
 
 #endif

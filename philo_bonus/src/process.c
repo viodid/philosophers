@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 12:28:49 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:54:33 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ void	philosophers(t_philosopher *header)
 }
 
 /*
- * This function block execution until one of the process ids in pids has already finished.
- * Then, it kills the remaining processes ids in pids.
+ * This function block execution until one of the process ids in pids has
+ * already finished. Then, it kills the remaining processes ids in pids.
 */
 static void	close_processes(const pid_t *pids, const uint no_processes)
 {
@@ -72,13 +72,13 @@ static void	close_processes(const pid_t *pids, const uint no_processes)
 	}
 }
 
-static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_no)
+static void	handle_threads(pid_t *pids, t_philosopher *head,
+		const uint process_no)
 {
 	t_philosopher	*philo;
 	pthread_t		thread_philo;
 	pthread_t		thread_watcher;
 
-	free(pids);
 	philo = select_philo(head, process_no);
 	if (philo->process_no % 2 == 0)
 		usleep(500);
@@ -86,18 +86,22 @@ static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_
 	create_thread(&thread_watcher, watcher_routine, (void *)philo);
 	detach_thread(thread_philo);
 	join_thread(thread_watcher);
+	free(pids);
+	free(head->args);
+	free_philosophers(head);
+	exit(EXIT_SUCCESS);
 }
 
 static void	*philo_thread(void *data)
 {
-	sem_t	*sem_fork;
-	sem_t	*sem_die;
+	sem_t			*sem_fork;
+	sem_t			*sem_die;
 	t_philosopher	*philo;
 
 	philo = (t_philosopher *)data;
 	gettimeofday(&philo->timestamp, NULL);
 	sem_fork = open_semaphore(SEM_FORKS, philo->args->no_philo);
-	sem_die = open_semaphore(hash_name(philo->process_no), 1);
+	sem_die = open_semaphore(philo->custom_sem_name, 1);
 	while (philo->no_meals != philo->args->total_no_meals)
 		philo_thread_routine(sem_fork, sem_die, philo);
 	close_semaphore(sem_fork);
@@ -105,23 +109,24 @@ static void	*philo_thread(void *data)
 	return (NULL);
 }
 
-static void	philo_thread_routine(sem_t *sem_fork, sem_t *sem_die, t_philosopher *philo)
+static void	philo_thread_routine(sem_t *sem_fork, sem_t *sem_die,
+		t_philosopher *philo)
 {
-		wait_semaphore(sem_fork);
-		state_printer(philo, FORK);
-		wait_semaphore(sem_fork);
-		state_printer(philo, FORK);
-		usleep(100);
-		wait_semaphore(sem_die);
-		gettimeofday(&philo->timestamp, NULL);
-		state_printer(philo, EAT);
-		usleep(philo->args->time_to_eat * 1000);
-		post_semaphore(sem_die);
-		post_semaphore(sem_fork);
-		post_semaphore(sem_fork);
-		philo->no_meals++;
-		state_printer(philo, SLEEP);
-		usleep(philo->args->time_to_sleep * 1000);
-		state_printer(philo, THINK);
-		usleep(1000);
+	wait_semaphore(sem_fork);
+	state_printer(philo, FORK);
+	wait_semaphore(sem_fork);
+	state_printer(philo, FORK);
+	usleep(100);
+	wait_semaphore(sem_die);
+	gettimeofday(&philo->timestamp, NULL);
+	state_printer(philo, EAT);
+	usleep(philo->args->time_to_eat * 1000);
+	post_semaphore(sem_die);
+	post_semaphore(sem_fork);
+	post_semaphore(sem_fork);
+	philo->no_meals++;
+	state_printer(philo, SLEEP);
+	usleep(philo->args->time_to_sleep * 1000);
+	state_printer(philo, THINK);
+	usleep(1000);
 }

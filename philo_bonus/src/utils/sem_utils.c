@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 14:39:25 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 11:27:00 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:54:56 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,12 @@ sem_t	*open_semaphore(const char *sem_name, uint init_val)
 
 void	unlink_semaphore(const char *sem_name)
 {
-	// printf("unlink_semaphore %s\n", sem_name);
 	if (sem_unlink(sem_name))
 		exit(EXIT_FAILURE);
 }
 
 void	close_semaphore(sem_t *sem)
 {
-	// printf("close_semaphore\n");
 	if (sem_close(sem))
 		exit(EXIT_FAILURE);
 }

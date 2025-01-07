@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 12:28:16 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:48:00 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*watcher_routine(void *data)
 	sem_t			*sem_die;
 
 	philo = (t_philosopher *)data;
-	sem_die = open_semaphore(hash_name(philo->process_no), 1);
+	sem_die = open_semaphore(philo->custom_sem_name, 1);
 	usleep(1000 * 10);
 	while (philo->no_meals != philo->args->total_no_meals)
 	{

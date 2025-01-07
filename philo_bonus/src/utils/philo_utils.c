@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/02 12:55:13 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 12:09:56 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:54:46 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	free_philosophers(t_philosopher *philo)
 	while (philo)
 	{
 		next = philo->next;
+		free(philo->custom_sem_name);
 		free(philo);
 		philo = next;
 	}
@@ -44,13 +45,13 @@ char	*hash_name(const uint process_no)
 
 void	deallocate_semaphores(t_philosopher *head)
 {
-	t_philosopher *philo;
+	t_philosopher	*philo;
 
 	philo = head;
 	unlink_semaphore(SEM_FORKS);
 	while (philo)
 	{
-		unlink_semaphore(hash_name(philo->process_no));
+		unlink_semaphore(philo->custom_sem_name);
 		philo = philo->next;
 	}
 }
@@ -68,4 +69,3 @@ t_philosopher	*select_philo(t_philosopher *head, const uint process_no)
 	}
 	return (philo);
 }
-

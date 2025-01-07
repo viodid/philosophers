@@ -108,6 +108,7 @@ static void	initialize_philosopher(t_philosopher *philo,
 				t_args *args, const uint process_no)
 {
 	philo->process_no = process_no;
+	philo->custom_sem_name = hash_name(process_no);
 	philo->args = args;
 	philo->no_meals = 0;
 }
