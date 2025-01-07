@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 17:59:23 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 17:03:07 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void				initialize_mutexes(t_philosopher *head);
 * ./philo no_philo time_to_die time_to_eat time_to_sleep total_no_meals(optional)
 */
 
-// TODO: Remove exit() as it is a forbidden function in this assignment
 int	main(int argc, char *argv[])
 {
 	t_philosopher	*head;
@@ -46,7 +45,11 @@ int	main(int argc, char *argv[])
 		return (EXIT_FAILURE);
 	}
 	args = allocate_args(argc, argv);
+	if (!args)
+		return (EXIT_FAILURE);
 	head = allocate_philosophers(args);
+	if (!head)
+		return (EXIT_FAILURE);
 	initialize_mutexes(head);
 	philosophers(head);
 	free_philosophers(head);
@@ -56,7 +59,7 @@ int	main(int argc, char *argv[])
 
 /*
  * Create one struct for every philosopher.
- * Each struct should have a m_fork, the args, and a pointer
+ * Each struct should have a `m_fork`, the args, and a pointer
  * to the next philosopher. The last node of the linked list
  * should point to the first (circular linked list)
 */
@@ -70,14 +73,14 @@ static t_philosopher	*allocate_philosophers(t_args *args)
 		return (NULL);
 	header = (t_philosopher *) malloc(sizeof(t_philosopher));
 	if (!header)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	philo = header;
 	i = 1;
 	while (i < args->no_philo)
 	{
 		philo->next = (t_philosopher *) malloc(sizeof(t_philosopher));
 		if (!philo->next)
-			exit(EXIT_FAILURE);
+			return (NULL);
 		philo->args = args;
 		philo->thread_no = i;
 		philo = philo->next;
@@ -95,7 +98,7 @@ static t_args	*allocate_args(int argc, char *argv[])
 
 	output = (t_args *)malloc(sizeof(t_args));
 	if (!output)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	output->no_philo = ft_u_atoi(argv[1]);
 	output->time_to_die = ft_u_atoi(argv[2]);
 	output->time_to_eat = ft_u_atoi(argv[3]);
@@ -111,17 +114,13 @@ static void	initialize_mutexes(t_philosopher *head)
 {
 	t_philosopher	*philo;
 
-	if (!head)
-		return ;
 	philo = head;
 	while (philo->next != head)
 	{
-		if (pthread_mutex_init(&philo->m_fork, NULL)
-			|| pthread_mutex_init(&philo->m_die, NULL))
-			exit(EXIT_FAILURE);
+		pthread_mutex_init(&philo->m_fork, NULL);
+		pthread_mutex_init(&philo->m_die, NULL);
 		philo = philo->next;
 	}
-	if (pthread_mutex_init(&philo->m_fork, NULL)
-		|| pthread_mutex_init(&philo->m_die, NULL))
-		exit(EXIT_FAILURE);
+	pthread_mutex_init(&philo->m_fork, NULL);
+	pthread_mutex_init(&philo->m_die, NULL);
 }

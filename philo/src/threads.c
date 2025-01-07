@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 17:56:12 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 17:04:34 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 static void	*philo_routine(void *data);
 static void	detach_threads(t_philosopher *head);
+static void	philo_routine_helper(t_philosopher *philo);
 
 void	philosophers(t_philosopher *head)
 {
@@ -45,27 +46,30 @@ static void	*philo_routine(void *data)
 	philo = (t_philosopher *)data;
 	philo->no_meals = 0;
 	if (philo->thread_no % 2 == 0)
-		usleep(5000);
+		usleep(500);
 	gettimeofday(&philo->timestamp, NULL);
 	while (philo->no_meals != philo->args->total_no_meals)
-	{
-		pthread_mutex_lock(&philo->m_fork);
-		state_printer(philo, FORK);
-		pthread_mutex_lock(&philo->next->m_fork);
-		pthread_mutex_lock(&philo->m_die);
-		state_printer(philo, FORK);
-		gettimeofday(&philo->timestamp, NULL);
-		state_printer(philo, EAT);
-		usleep(philo->args->time_to_eat * 1000);
-		pthread_mutex_unlock(&philo->m_fork);
-		pthread_mutex_unlock(&philo->next->m_fork);
-		pthread_mutex_unlock(&philo->m_die);
-		philo->no_meals++;
-		state_printer(philo, SLEEP);
-		usleep(philo->args->time_to_sleep * 1000);
-		state_printer(philo, THINK);
-	}
+		philo_routine_helper(philo);
 	return (NULL);
+}
+
+static void	philo_routine_helper(t_philosopher *philo)
+{
+	pthread_mutex_lock(&philo->m_fork);
+	state_printer(philo, FORK);
+	pthread_mutex_lock(&philo->next->m_fork);
+	pthread_mutex_lock(&philo->m_die);
+	state_printer(philo, FORK);
+	gettimeofday(&philo->timestamp, NULL);
+	state_printer(philo, EAT);
+	usleep(philo->args->time_to_eat * 1000);
+	pthread_mutex_unlock(&philo->m_fork);
+	pthread_mutex_unlock(&philo->next->m_fork);
+	pthread_mutex_unlock(&philo->m_die);
+	philo->no_meals++;
+	state_printer(philo, SLEEP);
+	usleep(philo->args->time_to_sleep * 1000);
+	state_printer(philo, THINK);
 }
 
 static void	detach_threads(t_philosopher *head)

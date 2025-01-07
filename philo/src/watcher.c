@@ -6,13 +6,13 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 18:00:15 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 13:31:42 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo.h"
 
-static uint		check_all_finished_meals(t_philosopher *philo);
+static uint		count_all_finished_meals(t_philosopher *philo);
 static u_int8_t	check_starvation(t_philosopher *philo);
 static long		compute_time_ms(t_timeval upper_val, t_timeval lower_val);
 
@@ -22,8 +22,9 @@ void	*watcher_routine(void *data)
 	t_philosopher	*head;
 
 	philo = (t_philosopher *)data;
+	usleep(500);
 	head = philo;
-	while (check_all_finished_meals(head) < head->args->no_philo)
+	while (count_all_finished_meals(head) < head->args->no_philo)
 	{
 		while (philo->next != head)
 		{
@@ -34,12 +35,12 @@ void	*watcher_routine(void *data)
 		if (check_starvation(philo))
 			return (NULL);
 		philo = philo->next;
-		usleep(1000 * 2);
+		usleep(100);
 	}
 	return (NULL);
 }
 
-static uint	check_all_finished_meals(t_philosopher *philo)
+static uint	count_all_finished_meals(t_philosopher *philo)
 {
 	t_philosopher	*head;
 	uint			output;

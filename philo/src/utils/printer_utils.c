@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 13:01:23 by dyunta            #+#    #+#             */
-/*   Updated: 2024/12/30 18:02:35 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 15:59:57 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static char	*ft_strjoin(char *str1, char *str2)
 	length = ft_strlen(str1) + ft_strlen(str2) + 1;
 	output = (char *) malloc(sizeof(char) * length);
 	if (!output)
-		exit(EXIT_FAILURE);
+		return (NULL);
 	i = 0;
 	while (i < ft_strlen(str1))
 	{
