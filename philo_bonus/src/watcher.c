@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 10:44:42 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:28:16 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,9 @@ void	*watcher_routine(void *data)
 		time = compute_time_ms(curr_time, philo->timestamp);
 		if (time > (philo->args->time_to_die * 1000))
 		{
-			printf("time: %ld\n", time);
 			state_printer(philo, DIED);
 			wait_semaphore(sem_die);
-			printf("after die\n");
-			break;
+			break ;
 		}
 		usleep(100);
 	}
@@ -42,7 +40,8 @@ void	*watcher_routine(void *data)
 	return (NULL);
 }
 
-static long	compute_time_ms(const t_timeval upper_val, const t_timeval lower_val)
+static long	compute_time_ms(const t_timeval upper_val,
+		const t_timeval lower_val)
 {
 	long	sec;
 	long	micros;

@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 10:47:21 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:11:24 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,7 @@ void		join_thread(pthread_t thread);
 void		detach_thread(pthread_t thread);
 void		*wait_process(void *data);
 char		*hash_name(uint process_no);
+void		deallocate_semaphores(t_philosopher *head);
+t_philosopher	*select_philo(t_philosopher *head, uint process_no);
 
 #endif

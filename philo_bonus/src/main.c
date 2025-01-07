@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:47:26 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 16:29:14 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 11:24:24 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 static t_args			*allocate_args(int argc, char *argv[]);
 static t_philosopher	*allocate_philosophers(t_args *args);
-static void	initialize_philosopher(t_philosopher *philo, t_args *args, uint process_no);
+static void				initialize_philosopher(t_philosopher *philo,
+							t_args *args, uint process_no);
 
 /* SUBJECT
  * 1. Each philosopher should be a process.
@@ -76,7 +77,7 @@ static t_args	*allocate_args(int argc, char *argv[])
  * The last node of the linked list should point to the first.
 */
 
-static t_philosopher    *allocate_philosophers(t_args *args)
+static t_philosopher	*allocate_philosophers(t_args *args)
 {
 	t_philosopher	*header;
 	t_philosopher	*philo;
@@ -103,7 +104,8 @@ static t_philosopher    *allocate_philosophers(t_args *args)
 	return (header);
 }
 
- static void	initialize_philosopher(t_philosopher *philo, t_args *args, const uint process_no)
+static void	initialize_philosopher(t_philosopher *philo,
+				t_args *args, const uint process_no)
 {
 	philo->process_no = process_no;
 	philo->args = args;

@@ -6,15 +6,16 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 10:49:51 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 12:28:49 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/philo_bonus.h"
 
-static void	close_processes(const pid_t *pids, const uint no_processes);
-static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_no);
-static t_philosopher	*select_philo(t_philosopher *head, uint process_no);
+static void	close_processes(const pid_t *pids, uint no_processes);
+static void	handle_threads(pid_t *pids, t_philosopher *head, uint process_no);
+static void	philo_thread_routine(sem_t *sem_fork, sem_t *sem_die,
+				t_philosopher *philo);
 static void	*philo_thread(void *data);
 
 /* create a semaphore and initialize it with `no_philos`.
@@ -31,13 +32,10 @@ void	philosophers(t_philosopher *header)
 	uint	i;
 
 	if (header->args->no_philo == 0)
-		return;
+		return ;
 	pids = (pid_t *) malloc(sizeof(int) * header->args->no_philo);
 	if (!pids)
-	{
-		perror("malloc error");
 		exit(EXIT_FAILURE);
-	}
 	pids[0] = fork();
 	if (pids[0] == 0)
 		return (handle_threads(pids, header, 1));
@@ -51,15 +49,8 @@ void	philosophers(t_philosopher *header)
 		i++;
 	}
 	close_processes(pids, header->args->no_philo);
-	printf("parent pid: %d\n", getpid());
 	free(pids);
-	unlink_semaphore(SEM_FORKS);
-	t_philosopher *philo = header;
-	while (philo)
-	{
-		unlink_semaphore(hash_name(philo->process_no));
-		philo = philo->next;
-	}
+	deallocate_semaphores(header);
 }
 
 /*
@@ -72,15 +63,11 @@ static void	close_processes(const pid_t *pids, const uint no_processes)
 	pid_t		dealloc_process;
 
 	i = 0;
-
 	dealloc_process = waitpid(-1, NULL, 0);
-	if (dealloc_process)
-		perror("waitpid");
 	while (i < no_processes)
 	{
-		printf("pid: %d\n", pids[i]);
-		if (kill(pids[i], SIGKILL) && pids[i] != dealloc_process)
-			perror("kill");
+		if (pids[i] != dealloc_process)
+			kill(pids[i], SIGKILL);
 		i++;
 	}
 }
@@ -101,20 +88,6 @@ static void	handle_threads(pid_t *pids, t_philosopher *head, const uint process_
 	join_thread(thread_watcher);
 }
 
-static t_philosopher	*select_philo(t_philosopher *head, const uint process_no)
-{
-	t_philosopher	*philo;
-
-	philo = head;
-	while (philo)
-	{
-		if (philo->process_no == process_no)
-			return (philo);
-		philo = philo->next;
-	}
-	return (philo);
-}
-
 static void	*philo_thread(void *data)
 {
 	sem_t	*sem_fork;
@@ -125,13 +98,15 @@ static void	*philo_thread(void *data)
 	gettimeofday(&philo->timestamp, NULL);
 	sem_fork = open_semaphore(SEM_FORKS, philo->args->no_philo);
 	sem_die = open_semaphore(hash_name(philo->process_no), 1);
-
-	printf("child pid: %d\n", getpid()); // rm
-	printf("process_no: %d\n", philo->process_no);
-
 	while (philo->no_meals != philo->args->total_no_meals)
-	{
-		usleep(100);
+		philo_thread_routine(sem_fork, sem_die, philo);
+	close_semaphore(sem_fork);
+	close_semaphore(sem_die);
+	return (NULL);
+}
+
+static void	philo_thread_routine(sem_t *sem_fork, sem_t *sem_die, t_philosopher *philo)
+{
 		wait_semaphore(sem_fork);
 		state_printer(philo, FORK);
 		wait_semaphore(sem_fork);
@@ -148,8 +123,5 @@ static void	*philo_thread(void *data)
 		state_printer(philo, SLEEP);
 		usleep(philo->args->time_to_sleep * 1000);
 		state_printer(philo, THINK);
-	}
-	close_semaphore(sem_fork);
-	close_semaphore(sem_die);
-	return (NULL);
+		usleep(1000);
 }
