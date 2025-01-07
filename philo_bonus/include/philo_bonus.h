@@ -51,7 +51,6 @@ typedef struct s_philosopher
 	int						no_meals;
 	uint					process_no;
 	t_timeval				timestamp;
-	pthread_t				thread;
 	struct s_philosopher	*next;
 }	t_philosopher;
 

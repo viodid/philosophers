@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 12:55:01 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 19:54:46 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 09:07:29 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	*watcher_routine(void *data)
 			printf("time: %ld\n", time);
 			state_printer(philo, DIED);
 			wait_semaphore(sem_die);
+			printf("after die\n");
 			break;
 		}
 		usleep(100);
