@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/14 19:55:10 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/06 18:58:42 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 10:47:21 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@
 
 # define TRUE		1
 # define FALSE		0
-# define SEM_FORKS	"/forks"
-# define SEM_DIE	"/die"
+# define SEM_FORKS	"/FORKS"
 # define RED_BOLD	"\001\033[1;31m\002"
 # define GRN_BOLD	"\001\033[1;32m\002"
 # define X_BOLD		"\001\033[1;33m\002"
@@ -78,5 +77,6 @@ void		create_thread(pthread_t* thread, void *routine, void *payload);
 void		join_thread(pthread_t thread);
 void		detach_thread(pthread_t thread);
 void		*wait_process(void *data);
+char		*hash_name(uint process_no);
 
 #endif

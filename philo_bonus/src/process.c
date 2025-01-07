@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/30 20:19:45 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 09:17:39 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/07 10:49:51 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,12 @@ void	philosophers(t_philosopher *header)
 	printf("parent pid: %d\n", getpid());
 	free(pids);
 	unlink_semaphore(SEM_FORKS);
-	unlink_semaphore(SEM_DIE);
+	t_philosopher *philo = header;
+	while (philo)
+	{
+		unlink_semaphore(hash_name(philo->process_no));
+		philo = philo->next;
+	}
 }
 
 /*
@@ -119,7 +124,7 @@ static void	*philo_thread(void *data)
 	philo = (t_philosopher *)data;
 	gettimeofday(&philo->timestamp, NULL);
 	sem_fork = open_semaphore(SEM_FORKS, philo->args->no_philo);
-	sem_die = open_semaphore(SEM_DIE, 1);
+	sem_die = open_semaphore(hash_name(philo->process_no), 1);
 
 	printf("child pid: %d\n", getpid()); // rm
 	printf("process_no: %d\n", philo->process_no);
