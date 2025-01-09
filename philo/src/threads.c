@@ -6,7 +6,7 @@
 /*   By: dyunta <dyunta@student.42madrid.com>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 17:18:57 by dyunta            #+#    #+#             */
-/*   Updated: 2025/01/07 17:04:34 by dyunta           ###   ########.fr       */
+/*   Updated: 2025/01/09 14:11:57 by dyunta           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,10 @@ void	philosophers(t_philosopher *head)
 	i = 0;
 	while (philo->next != head)
 	{
-		usleep(10);
 		pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 		philo = philo->next;
 		i++;
 	}
-	usleep(10);
 	pthread_create(&philo->thread, NULL, philo_routine, (void *)philo);
 	pthread_create(&watcher, NULL, watcher_routine, (void *)head);
 	detach_threads(head);
@@ -46,7 +44,7 @@ static void	*philo_routine(void *data)
 	philo = (t_philosopher *)data;
 	philo->no_meals = 0;
 	if (philo->thread_no % 2 == 0)
-		usleep(500);
+		usleep(5000);
 	gettimeofday(&philo->timestamp, NULL);
 	while (philo->no_meals != philo->args->total_no_meals)
 		philo_routine_helper(philo);
@@ -70,6 +68,7 @@ static void	philo_routine_helper(t_philosopher *philo)
 	state_printer(philo, SLEEP);
 	usleep(philo->args->time_to_sleep * 1000);
 	state_printer(philo, THINK);
+	usleep(1500);
 }
 
 static void	detach_threads(t_philosopher *head)

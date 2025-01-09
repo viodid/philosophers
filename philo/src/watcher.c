@@ -22,7 +22,7 @@ void	*watcher_routine(void *data)
 	t_philosopher	*head;
 
 	philo = (t_philosopher *)data;
-	usleep(500);
+	usleep(7000);
 	head = philo;
 	while (count_all_finished_meals(head) < head->args->no_philo)
 	{
@@ -35,7 +35,7 @@ void	*watcher_routine(void *data)
 		if (check_starvation(philo))
 			return (NULL);
 		philo = philo->next;
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }
